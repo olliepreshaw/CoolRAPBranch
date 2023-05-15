@@ -32,7 +32,7 @@ namespace KIT206_RAP.Entites
             
        // Constructor
         public Staff(int id, string type, string firstName, string lastName, string title, string schoolUnit, string campHouse, string email, string photURL, string lev, DateTime utas_start, DateTime curretn_start)
-            : base( id, type, firstName, lastName, title, schoolUnit, campHouse, email, photURL, utas_start, curretn_start)
+            : base( id, type, firstName, lastName, title, schoolUnit, campHouse, email, photURL, utas_start, curretn_start, lev)
         {
             // will have to ping the database with something like get all students with "researcher name" as supervisor
             // this currently happens in the 

@@ -9,6 +9,7 @@ namespace KIT206_RAP.Entites
 {
     public enum Level
     { 
+        Student,
         A, 
         B, 
         C, 

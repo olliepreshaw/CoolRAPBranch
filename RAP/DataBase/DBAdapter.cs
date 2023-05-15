@@ -176,8 +176,9 @@ namespace KIT206_RAP.DataBase
                     var cur_start = rdr.GetDateTime("current_start");
                     var degree = rdr.GetString("degree");
                     var superID = rdr.GetInt32("supervisor_id");
+                    var lev = "Student";
 
-                    Student res = new Student(id, type, firstName, lastName, title, unit, campus, email, photo, superID, degree,  utas_start, cur_start);
+                    Student res = new Student(id, type, firstName, lastName, title, unit, campus, email, photo, superID, degree,  utas_start, cur_start, lev);
                     Stf.Supervisions.Add(res);
                 }
             }
@@ -231,22 +232,22 @@ namespace KIT206_RAP.DataBase
                     {
                         var degree = rdr.GetString("degree");
                         var superID = rdr.GetInt32("supervisor_id");
+                        var lev = "Student";
 
 
-                        Student Stu = new Student(id, type, firstName, lastName, title, unit, campus, email, photo, superID, degree, utas_start, cur_start);
-                        GetPubs(Stu);
+                        Student Stu = new Student(id, type, firstName, lastName, title, unit, campus, email, photo, superID, degree, utas_start, cur_start, lev);
+                        //GetPubs(Stu);
                         Researchers.Add(Stu);
                     }
                     else
                     {
                         var lev = rdr.GetString("level");
-
                         Staff sta = new Staff(id, type, firstName, lastName, title, unit, campus, email, photo, lev, utas_start, cur_start);
-                        GetPubs(sta);
+                        //GetPubs(sta);
                         Researchers.Add(sta);
                         // this could be replaced with nested for loops to check the list for supervisors == id
                         // probs faster to query DB?
-                        GetSupervisions(sta);
+                        //GetSupervisions(sta);
                     }
 
                     //Researcher res = new Researcher(id, type, firstName, lastName, title, unit, campus, email, photo, utas_start, cur_start);
@@ -374,8 +375,9 @@ namespace KIT206_RAP.DataBase
                     var superID = rdr.GetInt32("supervisor_id");
                     var utas_start = rdr.GetDateTime("utas_start");
                     var cur_start = rdr.GetDateTime("current_start");
+                    var lev = "Student";
 
-                    Stu = new Student(ID, type, firstName, lastName, title, unit, campus, email, photo, superID, degree, utas_start, cur_start);
+                    Stu = new Student(ID, type, firstName, lastName, title, unit, campus, email, photo, superID, degree, utas_start, cur_start, lev);
                     // close the reader
                     if (rdr != null)
                     {

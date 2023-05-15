@@ -27,22 +27,21 @@ namespace KIT206_RAP.Entites
         public string CurrentJobTitle { get; set; }
         public DateTime CommenceCurrentPosition { get; private set; }
         public DateTime CommencedWithInstitution { get; private set; }
+        public Level PositionLevel { get; set; }
         public double Q1Percentage { get; private set; }
-        //public string JobTitle { get; set; }
-        //public double ExpectedNoPublications { get; set; }
-
         public List<Publication> Pubs{ get; set; }
         public double Tenure { get; private set; } // time in fractional years since the researcher commecned with the institution
         //public Level positionLevle { get; set; }
 
         // Constructor
         public Researcher(int iD, string type, string firstName, string lastName, String title, string schoolUnit,
-            string campHouse, string email, string photURL, DateTime utas_start, DateTime curretn_start)
+            string campHouse, string email, string photURL, DateTime utas_start, DateTime curretn_start, string lev)
         {
             ID = iD;
             Type = (ResearcherType)Enum.Parse(typeof(ResearcherType), type);
             FirstName = firstName;
             LastName = lastName;
+            Title = title;
             SchoolUnit = schoolUnit;
             Email = email;
             photoURL = photURL;
@@ -51,6 +50,8 @@ namespace KIT206_RAP.Entites
             this.photoURL = photoURL;
             CommencedWithInstitution = utas_start;
             CommenceCurrentPosition = curretn_start;
+            PositionLevel = (Level)Enum.Parse(typeof(Level), lev);
+            Console.WriteLine(firstName + "..." + PositionLevel);
             // could call the GetPubs here in the constructor if we wanted, get the pubs when we
             // create the researcher if we want...
 
