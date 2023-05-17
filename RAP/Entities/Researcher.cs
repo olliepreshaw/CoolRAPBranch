@@ -35,7 +35,7 @@ namespace KIT206_RAP.Entites
 
         // Constructor
 
-        //this is a comment
+        // Push to main
         public Researcher(int iD, string type, string firstName, string lastName, String title, string schoolUnit,
             string campHouse, string email, string photURL, DateTime utas_start, DateTime curretn_start, string lev)
         {
