@@ -34,6 +34,8 @@ namespace KIT206_RAP.Entites
         //public Level positionLevle { get; set; }
 
         // Constructor
+
+        //this is a comment
         public Researcher(int iD, string type, string firstName, string lastName, String title, string schoolUnit,
             string campHouse, string email, string photURL, DateTime utas_start, DateTime curretn_start, string lev)
         {
