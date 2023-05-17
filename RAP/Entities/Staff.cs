@@ -20,7 +20,7 @@ namespace KIT206_RAP.Entites
         public JobTitle Job_Title{ get; set; }
         public double FundingRecieved { get; set; }
         public double PerformanceByFunding { get; set; }
-        public int ThreeYearAverage { get; set; }
+        public double ThreeYearAverage { get; set; }
         public int PerformanceByPublication { get; set; }
         public List<Position> Positions { get; set; }
         // not sure how to handle supervisions, just the researcher id or a name?
@@ -44,63 +44,29 @@ namespace KIT206_RAP.Entites
 
         }
 
-        public void DeriveJobTitle(Level level)
-        {
-            switch (level)
-            {
-                case Level.A:
-                    Job_Title = JobTitle.ResearchAssociate;
-                    ExpectedNoPubs = 0.5;
-                    break;
-                case Level.B:
-                    Job_Title = JobTitle.Lecturer;
-                    ExpectedNoPubs = 1;
-                    break;
-
-                case Level.C:
-                    Job_Title = JobTitle.AssistantProfessor;
-                    ExpectedNoPubs = 2;
-                    break;
-
-                case Level.D:
-                    Job_Title = JobTitle.AssociateProfessor;
-                    ExpectedNoPubs = 3.2;
-                    break;
-
-                case Level.E:
-                    Job_Title = JobTitle.Professor;
-                    ExpectedNoPubs = 4;
-                    break;
-
-                default:
-                    throw new ArgumentException("Invalid level character");
-            }
-        }
+        
 
         public static void CalcStafPerformance(Staff Sta)
         {
 
         }
-        
-       /* 
-        public int AverageThreeYear()
+        public void AverageThreeYear(List<Publication> publications)
         {
             //3-year Average is the total number of publications in the previous three whole calendar years, divided by three.
             int count = 0;
             int sum = 0;
             DateTime threeYearsAgo = DateTime.Now.AddYears(-3);
-            foreach (Publication publication in Publications)
+            foreach (Publication publication in publications)
             {
-                if (publication.PublicationYear >= threeYearsAgo)
+                if (publication.AvailabilityDate >= threeYearsAgo)
                 {
-                    count++;
-                    sum += publication.Q1Ranked ? 4 : 1;
+                    sum++;
                 }
+                count++;
             }
-
-            return count > 0 ? (int)Math.Round((double)sum / count, MidpointRounding.AwayFromZero) : 0;
+            this.ThreeYearAverage = count > 0 ? sum / count : 0;
         }
-*/
+
         // calculate performance by funding
         public double PerforByFund(double fundingRecieved)
         {
@@ -112,8 +78,6 @@ namespace KIT206_RAP.Entites
         }
 
         //3-year average
-        //performance by publkjkjkication
-        //performance by fundgin
        
         public static void supervisions()
         {
@@ -154,14 +118,7 @@ namespace KIT206_RAP.Entites
                   Console.WriteLine(researcher.Q1Percentage);
               }
               */
-        public enum JobTitle
-        {
-            ResearchAssociate,
-            Lecturer,
-            AssistantProfessor,
-            AssociateProfessor,
-            Professor
-        }
+       
         /*
          * struggling to get below enum working
         public enum ExpectedPublications : double

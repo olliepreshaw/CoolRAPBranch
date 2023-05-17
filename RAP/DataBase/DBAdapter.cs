@@ -105,11 +105,10 @@ namespace KIT206_RAP.DataBase
                         var type = rdr.GetString("type");
                         var cite_as = rdr.GetString("cite_as");
                         var available = rdr.GetDateTime("available");
-                        // i think we can get rid of the two next lines
-                        cmd = new MySqlCommand("select * from publication where doi = @doi", demo.conn);
-                        cmd.Parameters.AddWithValue("@id", doi);
-                        // untill here
-                        Publication pub = new Publication(title, doi, authors, cite_as, available, type);
+                        var ranking = rdr.GetString("ranking");
+
+
+                        Publication pub = new Publication(title, doi, authors, cite_as, available, type, ranking);
                         publications.Add(pub);
                         //Res.Pubs.Add(pub);
                     }

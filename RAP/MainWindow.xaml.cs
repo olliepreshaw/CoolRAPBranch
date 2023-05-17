@@ -24,17 +24,10 @@ namespace RAP
     /// </summary>
     public partial class MainWindow : Window
     {
-        public enum Level
-        {
-            Student,
-            A,
-            B,
-            C,
-            D,
-            E
-        }
         private ObservableCollection<Publication> selectedResearcherPublications;
         private ObservableCollection<Researcher> researchers;
+
+        public BitmapImage ImageData { get; set; }
 
 
         // select a researcher
@@ -50,9 +43,60 @@ namespace RAP
                 {
                     selectedResearcherPublications.Add(publication);
                 }
+                // researcher details
+                name.Text = "Name: " + selectedResearcher.FirstName + " " + selectedResearcher.LastName;
+                //title not displaying at all, mustn't be pulling from db?
+                title.Text = "Current Job Title: " + selectedResearcher.Title;
+                unit.Text = "Unit: " + selectedResearcher.SchoolUnit;
+                Enum campusPr = selectedResearcher.Camp;
+                campus.Text = "Campus: " + campusPr.ToString();
+                email.Text = "Email: " + selectedResearcher.Email;
+                //current job title not working, not sure its calculating?
+                job.Text = "Job: " + selectedResearcher.Job_Title;
+                
+                commencedInt.Text = "Commenced with institution: " + selectedResearcher.CommencedWithInstitution.ToString("d");
+                
+                commencedCurr.Text = "Commenced current job: " + selectedResearcher.CommenceCurrentPosition.ToString("d");
+                prevPos.Text = "Previous positions: " + selectedResearcher;
+                //double currTenure = CalcTenure(selectedResearcher, selectedResearcher.CommenceCurrentPosition);
+                //tenure.Text = "Tenure: " +  currTenure;
+                publi.Text = "Publications: " + selectedResearcher.Pubs.Count;
+                //implement this chris or ill cry
+                //threeYearAvg.Text = "3-year-average: " + selectedResearcher;
+                //cummulative count of sups pls, can't seem to access supervisions?
+                //supervisions.Text = "Job: " + selectedResearcher.;
+                //performance.Text = "Performance: " + selectedResearcher.performancebypublication;
+                if (selectedResearcher is Student student)
+                {
+                    //do student stuff...
+
+                    //can't access student specific fields :(((
+                    //degree.Text = "Degree: " + selectedResearcher.degree;
+                    supervisor.Text = "Supervisor: " + student.Supervisor;
+                    degree.Text = "Degree: " + student.Degree;
+                }
+                // image
+                ImageData = new BitmapImage(new Uri(selectedResearcher.PhotoURL));
+
+                Console.WriteLine("image URL " + selectedResearcher.PhotoURL);
 
                 Console.WriteLine("Selected researcher: " + selectedResearcher.FirstName);
             }
+        }
+        private void tempButton_Click(object sender, RoutedEventArgs e)
+        {
+            Researcher selectedResearcher = (Researcher)researcherListView.SelectedItem;
+            List<Publication> publications = PublicationsControl.FetchPublications(selectedResearcher);
+            PerformanceDetailsWindow PdetailsView = new PerformanceDetailsWindow();
+            Researcher.Q1PercentageCalc(selectedResearcher, publications);
+
+            if (selectedResearcher.Type == Researcher.ResearcherType.Staff)
+            {
+                Staff staff = (Staff)researcherListView.SelectedItem;
+                staff.AverageThreeYear(publications);
+            }
+            PdetailsView.DataContext = selectedResearcher;
+            PdetailsView.Show();
         }
 
         private void PublicationListView_SelectionChanged(object sender, SelectionChangedEventArgs e)

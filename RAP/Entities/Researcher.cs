@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Schema;
+using static KIT206_RAP.Entites.Researcher;
 
 namespace KIT206_RAP.Entites
 
@@ -23,13 +24,15 @@ namespace KIT206_RAP.Entites
         public string SchoolUnit { get; set; }
         public Campus Camp { get; set; }
         public string Email { get; set; }
-        public string photoURL{ get; set; }
+        public string PhotoURL{ get; set; }
         public string CurrentJobTitle { get; set; }
         public DateTime CommenceCurrentPosition { get; private set; }
         public DateTime CommencedWithInstitution { get; private set; }
         public Level PositionLevel { get; set; }
-        public double Q1Percentage { get; private set; }
+        public string Q1Percentage { get; private set; }
         public List<Publication> Pubs{ get; set; }
+        public JobTitle Job_Title { get; set; }
+        public double ExpectedNoPubs { get; set; }
         public double Tenure { get; private set; } // time in fractional years since the researcher commecned with the institution
         //public Level positionLevle { get; set; }
 
@@ -46,10 +49,9 @@ namespace KIT206_RAP.Entites
             Title = title;
             SchoolUnit = schoolUnit;
             Email = email;
-            photoURL = photURL;
+            PhotoURL = photURL;
             Pubs = new List<Publication>();
             //Camp = (Campus)Enum.Parse(typeof(Campus), type);
-            this.photoURL = photoURL;
             CommencedWithInstitution = utas_start;
             CommenceCurrentPosition = curretn_start;
             PositionLevel = (Level)Enum.Parse(typeof(Level), lev);
@@ -60,25 +62,46 @@ namespace KIT206_RAP.Entites
             //photoPlaceHolder = FetchPhoto();
             //positionLevle = CalcPosLevel(lev);
             //Title = title;
-            //DeriveJobTitle(positionLevle);
+            DeriveJobTitle(PositionLevel);
             }
-        // i dont think this is needed
-        // delete before submisssion.
-        /*
-        public Campus CampCalc(string strCamp)
+        public void DeriveJobTitle(Level level)
         {
-            
-            if (strCamp.Equals("Hobart")){
-                return Campus.Hobart;
-            }else if (strCamp.Equals("Launceston"))
+            switch (level)
             {
-                return Campus.Launceston;
-            }
-            return Campus.Cradle_Coast;
-        }*/
+                case Level.A:
+                    Job_Title = JobTitle.ResearchAssociate;
+                    ExpectedNoPubs = 0.5;
+                    break;
+                case Level.B:
+                    Job_Title = JobTitle.Lecturer;
+                    ExpectedNoPubs = 1;
+                    break;
 
-        
-        
+                case Level.C:
+                    Job_Title = JobTitle.AssistantProfessor;
+                    ExpectedNoPubs = 2;
+                    break;
+
+                case Level.D:
+                    Job_Title = JobTitle.AssociateProfessor;
+                    ExpectedNoPubs = 3.2;
+                    break;
+
+                case Level.E:
+                    Job_Title = JobTitle.Professor;
+                    ExpectedNoPubs = 4;
+                    break;
+
+                case Level.Student:
+                    Job_Title = JobTitle.Student;
+                    ExpectedNoPubs = 0;
+                    break;
+
+                default:
+                    throw new ArgumentException("Invalid level character");
+            }
+        }
+
         // these do not happen in the constructor
         // if the db returns a list of positions with the researcher i say we itterate / loop through them
         // looking for what we need, if not we are calling the DB interface with a different query for each 
@@ -187,12 +210,18 @@ namespace KIT206_RAP.Entites
 
             return averagePublicationsPerYear;
         }
-        public String FetchPhoto()
+        public static void Q1PercentageCalc(Researcher researcher, List<Publication> publications)
         {
-            // fetch photo url
-            String placeHolder = "placeHolder";
+            int q1Count = 0;
 
-            return placeHolder;
+            foreach (Publication publication in publications)
+            {
+                if (publication.Ranking == RankingType.Q1)
+                {
+                    q1Count++;
+                }
+            }
+            researcher.Q1Percentage = String.Format("{0:0.00}", (double)q1Count / publications.Count * 100) + "%";
         }
         public enum ResearcherType
         {
@@ -204,6 +233,15 @@ namespace KIT206_RAP.Entites
             Hobart,
             Launceston,
             Cradle_Coast
+        }
+        public enum JobTitle
+        {
+            ResearchAssociate,
+            Lecturer,
+            AssistantProfessor,
+            AssociateProfessor,
+            Professor,
+            Student
         }
 
     }

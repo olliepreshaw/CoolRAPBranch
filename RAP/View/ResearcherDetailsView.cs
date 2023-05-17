@@ -51,7 +51,7 @@ namespace KIT206_RAP.View
             Console.WriteLine("School/Unit: " + Res.SchoolUnit);
             Console.WriteLine("Campus: " + Res.Camp);
             Console.WriteLine("Email: " + Res.Email);
-            Console.WriteLine("Photo: " + Res.photoURL);
+            Console.WriteLine("Photo: " + Res.PhotoURL);
             Console.WriteLine("Current Job Title" + Res.CurrentJobTitle);
             Console.WriteLine("Commenced with Institution: " + Res.CommencedWithInstitution);
             Console.WriteLine("Commecnce curr Pos: " + Res.CommenceCurrentPosition);

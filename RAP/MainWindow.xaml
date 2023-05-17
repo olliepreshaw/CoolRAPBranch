@@ -24,18 +24,43 @@
             </ListView.View>
         </ListView>
         <!-- filter by level combo box-->
-        
+        <Image Width="200" Height="200" Source="{Binding ImageData}" />
         <!-- Lable for Box -->
         <Label Grid.Row="0" Margin="5, 10, 0, 0" Content="Show:" VerticalAlignment="Top" />
-        <!-- Publications list -->
+        
+        <ListView Name="researcherDetailsView" Grid.Column="1">
+            <StackPanel>
+                <TextBlock Name="name" Text="Name: " FontSize="10" Margin="5"/>
+                <TextBlock Name="title" Text="Title: " FontSize="10" Margin="5"/>
+                <TextBlock Name="unit" Text="Unit: " FontSize="10" Margin="5"/>
+                <TextBlock Name="campus" Text="Campus: " FontSize="10" Margin="5"/>
+                <TextBlock Name="email" Text="Email: " FontSize="10" Margin="5"/>
+                <TextBlock Name="job" Text="Current job:" FontSize="10" Margin="5"/>
+                <TextBlock Name="commencedInt" Text="Commenced with institution: " FontSize="10" Margin="5" />
+                <TextBlock Name="commencedCurr" Text="Commenced current position: " FontSize="10" Margin="5"/>
+                <TextBlock Name="prevPos" Text="Previous Positions: " FontSize="10" Margin="5"/>
+                <TextBlock Name="tenure" Text="Tenure: " FontSize="10" Margin="5"/>
+                <TextBlock Name="threeYearAvg" Text="Three-year-average: " FontSize="10" Margin="5"/>
+                <TextBlock Name="supervisions" Text="Supervisions" FontSize="10" Margin="5"/>
+                <TextBlock Name="performance" Text="Performance: " FontSize="10" Margin="5"/>
+                <TextBlock Name="degree" Text="Degree: " FontSize="10" Margin="5"/>
+                <TextBlock Name="supervisor" Text="Supervisor: " FontSize="10" Margin="5"/>
+                <TextBlock Name="publi" Text="Publications: " FontSize="10" Margin="5"/>
+    <!-- Publications list -->
         <ListView Name="PublicationListView" Margin="0,289,0,20" SelectionChanged= "PublicationListView_SelectionChanged" Grid.Column="1" HorizontalAlignment="Center" Width="293" Height="150">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Publicaiton Date" DisplayMemberBinding="{Binding AvailabilityDate}"/>
+                    <GridViewColumn Header="Publication Date">
+                        <GridViewColumn.DisplayMemberBinding>
+                            <Binding Path="AvailabilityDate" StringFormat="{}{0:MM/dd/yyyy}" />
+                        </GridViewColumn.DisplayMemberBinding>
+                    </GridViewColumn>
                     <GridViewColumn Header="Publicaiton Title" DisplayMemberBinding="{Binding Title}"/>
                 </GridView>
             </ListView.View>
         </ListView>
-
+            </StackPanel>
+       </ListView>
+        <Button x:Name="tempButton" Grid.Column="2" Content="Button" HorizontalAlignment="Left" Margin="189,232,0,0" VerticalAlignment="Top" Click="tempButton_Click"/>
     </Grid>
 </Window>

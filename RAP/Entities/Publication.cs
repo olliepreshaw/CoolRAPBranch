@@ -17,15 +17,15 @@ namespace KIT206_RAP.Entites
         //public List<Researcher> Authors { get; set; }
         public string Authors { get; set; }
         public string CiteAs { get; set; }
+        public RankingType Ranking { get; set; }
         public DateTime AvailabilityDate { get; set; }
         //public int PageCount { get; set; }
         public PublicationType Type { get; set; }
         //public RankingType Ranking { get; set; }
 
         // Constructor
-        public Publication( string title, string doi, string authors, string citeAs, DateTime availabilityDate, string type)
+        public Publication( string title, string doi, string authors, string citeAs, DateTime availabilityDate, string type, string ranking)
         {
-            //Q1Ranked = q1Ranked;
             //PublicationYear = publicationYear;
             Title = title;
             DOI = doi;
@@ -34,7 +34,8 @@ namespace KIT206_RAP.Entites
             AvailabilityDate = availabilityDate;
             //PageCount = pageCount;
             typeCalc(type);
-            //Ranking = ranking;
+            Ranking = (RankingType)Enum.Parse(typeof(RankingType), ranking);
+            
 
         }
 
