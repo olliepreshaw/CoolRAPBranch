@@ -59,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controll\PublicationsControl.cs" />
     <Compile Include="View\PerformaceDetailsView.cs" />
     <Compile Include="View\PublicationView.cs" />
     <Compile Include="View\ResearcherDetailsView.cs" />

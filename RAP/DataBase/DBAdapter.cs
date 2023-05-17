@@ -46,7 +46,7 @@ namespace KIT206_RAP.DataBase
                 // Open the connection
                 demo.conn.Open();
                 // 1. Instantiate a new command with a query and connection
-                MySqlCommand cmd = new MySqlCommand("select DOI from researcher_publication where researcher_id = @id", demo.conn);
+                MySqlCommand cmd = new MySqlCommand("select doi from researcher_publication where researcher_id = @id", demo.conn);
                 cmd.Parameters.AddWithValue("@id", res.ID.ToString());
 
                 // 2. Call Execute reader to get query results
@@ -55,13 +55,9 @@ namespace KIT206_RAP.DataBase
                 while (rdr.Read())
                 {
                     var DOI = rdr.GetString("doi");
+                    Console.WriteLine("adding " + DOI);
                     DOIS.Add(DOI);
                     //Console.WriteLine(rdr.GetInt32("researcher_id"));
-                }
-                Console.WriteLine("the doi's are");
-                foreach (var DOI in DOIS)
-                {
-                    Console.WriteLine(DOI.ToString());
                 }
 
             }
@@ -84,21 +80,19 @@ namespace KIT206_RAP.DataBase
         }
 
         public static List<Publication> GetPublications(Researcher Res, List<string> TheDOIS)
+        
         {
             MySqlDataReader rdr = null;
             DBAdapter demo = new DBAdapter();
-            // get list of DOI strings which match resercher_id
+            List<Publication> publications = new List<Publication>();
 
-            List<String> DOIS = new List<String>();
-            List<Publication> pubs = new List<Publication>();
             foreach (string doi in TheDOIS)
             {
                 try
                 {
                     Console.WriteLine("the doi is " + doi);
-                    // Open the connection
-                    demo.conn.Open();
 
+                    demo.conn.Open();
                     // 1. Instantiate a new command with a query and connection
                     MySqlCommand cmd = new MySqlCommand("select * from publication where doi = @doi", demo.conn);
                     cmd.Parameters.AddWithValue("@doi", doi);
@@ -116,7 +110,8 @@ namespace KIT206_RAP.DataBase
                         cmd.Parameters.AddWithValue("@id", doi);
                         // untill here
                         Publication pub = new Publication(title, doi, authors, cite_as, available, type);
-                        Res.Pubs.Add(pub);
+                        publications.Add(pub);
+                        //Res.Pubs.Add(pub);
                     }
                 }
                 finally
@@ -132,8 +127,11 @@ namespace KIT206_RAP.DataBase
                     {
                         demo.conn.Close();
                     }
+
                 }
             }
+
+            return publications;
             // used for debugging
             /*
             foreach(Publication pub in pubs)
@@ -142,7 +140,6 @@ namespace KIT206_RAP.DataBase
             }
             Console.WriteLine("PAUSE;");
             */
-            return pubs;
         }
         
         //gets supervisions

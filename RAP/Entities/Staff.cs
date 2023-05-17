@@ -112,7 +112,7 @@ namespace KIT206_RAP.Entites
         }
 
         //3-year average
-        //performance by publication
+        //performance by publkjkjkication
         //performance by fundgin
        
         public static void supervisions()
