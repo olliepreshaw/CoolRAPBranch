@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KIT206_RAP.Entites
 {
-    internal class Publication
+    public class Publication
     {
         // Properties
         //public bool Q1Ranked { get; set; }

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -31,6 +33,8 @@ namespace KIT206_RAP.DataBase
              */
             string connectionString = String.Format("Database={0};Data Source={1};User Id={2};Password={3}", db, server, user, pass);
             conn = new MySqlConnection(connectionString);
+
+            
         }
        
         // gets the publications for any one researcher
@@ -110,7 +114,7 @@ namespace KIT206_RAP.DataBase
 
                         Publication pub = new Publication(title, doi, authors, cite_as, available, type, ranking);
                         publications.Add(pub);
-                        //Res.Pubs.Add(pub);
+                        Res.Pubs.Add(pub);
                     }
                 }
                 finally
@@ -594,6 +598,6 @@ namespace KIT206_RAP.DataBase
             }
             return count;
         }
-       
+
     }
 }

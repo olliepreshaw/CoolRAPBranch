@@ -17,7 +17,7 @@ namespace KIT206_RAP.Entites
         E 
     }
  
-    internal class Position
+    public class Position
     {
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }

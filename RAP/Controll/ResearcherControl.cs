@@ -1,11 +1,14 @@
 ﻿using KIT206_RAP.DataBase;
 using KIT206_RAP.Entites;
+using KIT206_RAP.DataSource;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KIT206_RAP.View;
+using System.Windows;
+using System.Collections;
 
 namespace KIT206_RAP.Controll
 {
@@ -65,6 +68,24 @@ namespace KIT206_RAP.Controll
 
         }
 
+        
+
+        public static void ControllTheDeetails(Researcher researcher)
+        {
+            Researcher.Q1PercentageCalc(researcher);
+
+            if (researcher.Type == Researcher.ResearcherType.Staff)
+            {
+                Staff staff = (Staff)researcher;
+                //Staff staff = (Staff)researcherListView.SelectedItem;
+                //ResearcherControl.AverageThreeYear(staff, publications);
+                Staff.AverageThreeYear(staff);
+                Staff.PerfByPub(staff);
+                staff.FundingRecieved=XMLAdapter.LoadFunding(staff);
+                Staff.PerfByFund(staff);
+
+            }
+        }
 
     }
 

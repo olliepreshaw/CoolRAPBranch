@@ -14,6 +14,7 @@ namespace RAP.Controll
         {
             List <Publication> pubs = new List<Publication>();
             pubs = DBAdapter.GetPubs(res);
+            //res.Pubs = pubs;
 
             return pubs;
         }

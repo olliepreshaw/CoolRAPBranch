@@ -13,7 +13,7 @@ namespace KIT206_RAP.Entites
 {
    
 
-    internal class Researcher
+    public class Researcher
     {
         // Properties some of these are not necisary
         public int ID { get; set; }
@@ -210,19 +210,20 @@ namespace KIT206_RAP.Entites
 
             return averagePublicationsPerYear;
         }
-        public static void Q1PercentageCalc(Researcher researcher, List<Publication> publications)
+        public static void Q1PercentageCalc(Researcher researcher)
         {
             int q1Count = 0;
 
-            foreach (Publication publication in publications)
+            foreach (Publication publication in researcher.Pubs)
             {
                 if (publication.Ranking == RankingType.Q1)
                 {
                     q1Count++;
                 }
             }
-            researcher.Q1Percentage = String.Format("{0:0.00}", (double)q1Count / publications.Count * 100) + "%";
+            researcher.Q1Percentage = String.Format("{0:0.00}", (double)q1Count / researcher.Pubs.Count * 100) + "%";
         }
+
         public enum ResearcherType
         {
             Student,

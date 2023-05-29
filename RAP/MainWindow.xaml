@@ -27,40 +27,63 @@
         <Image Width="200" Height="200" Source="{Binding ImageData}" />
         <!-- Lable for Box -->
         <Label Grid.Row="0" Margin="5, 10, 0, 0" Content="Show:" VerticalAlignment="Top" />
-        
-        <ListView Name="researcherDetailsView" Grid.Column="1">
+
+        <ListView Name="researcherDetailsView" Grid.Column="1" VerticalAlignment="Top" Height="400">
             <StackPanel>
-                <TextBlock Name="name" Text="Name: " FontSize="10" Margin="5"/>
-                <TextBlock Name="title" Text="Title: " FontSize="10" Margin="5"/>
-                <TextBlock Name="unit" Text="Unit: " FontSize="10" Margin="5"/>
-                <TextBlock Name="campus" Text="Campus: " FontSize="10" Margin="5"/>
-                <TextBlock Name="email" Text="Email: " FontSize="10" Margin="5"/>
-                <TextBlock Name="job" Text="Current job:" FontSize="10" Margin="5"/>
-                <TextBlock Name="commencedInt" Text="Commenced with institution: " FontSize="10" Margin="5" />
-                <TextBlock Name="commencedCurr" Text="Commenced current position: " FontSize="10" Margin="5"/>
-                <TextBlock Name="prevPos" Text="Previous Positions: " FontSize="10" Margin="5"/>
-                <TextBlock Name="tenure" Text="Tenure: " FontSize="10" Margin="5"/>
-                <TextBlock Name="threeYearAvg" Text="Three-year-average: " FontSize="10" Margin="5"/>
-                <TextBlock Name="supervisions" Text="Supervisions" FontSize="10" Margin="5"/>
-                <TextBlock Name="performance" Text="Performance: " FontSize="10" Margin="5"/>
-                <TextBlock Name="degree" Text="Degree: " FontSize="10" Margin="5"/>
-                <TextBlock Name="supervisor" Text="Supervisor: " FontSize="10" Margin="5"/>
-                <TextBlock Name="publi" Text="Publications: " FontSize="10" Margin="5"/>
-    <!-- Publications list -->
-        <ListView Name="PublicationListView" Margin="0,289,0,20" SelectionChanged= "PublicationListView_SelectionChanged" Grid.Column="1" HorizontalAlignment="Center" Width="293" Height="150">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Publication Date">
-                        <GridViewColumn.DisplayMemberBinding>
-                            <Binding Path="AvailabilityDate" StringFormat="{}{0:MM/dd/yyyy}" />
-                        </GridViewColumn.DisplayMemberBinding>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Publicaiton Title" DisplayMemberBinding="{Binding Title}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+                <TextBlock Name="name" Text="Name: " FontSize="10" Margin="2"/>
+                <TextBlock Name="resTitle" Text="Title: " FontSize="10" Margin="2"/>
+                <TextBlock Name="unit" Text="Unit: " FontSize="10" Margin="2"/>
+                <TextBlock Name="campus" Text="Campus: " FontSize="10" Margin="2"/>
+                <TextBlock Name="email" Text="Email: " FontSize="10" Margin="2"/>
+                <TextBlock Name="job" Text="Current job:" FontSize="10" Margin="2"/>
+                <TextBlock Name="commencedInt" Text="Commenced with institution: " FontSize="10" Margin="2" />
+                <TextBlock Name="commencedCurr" Text="Commenced current position: " FontSize="10" Margin="2"/>
+                <TextBlock Name="prevPos" Text="Previous Positions: " FontSize="10" Margin="2"/>
+                <TextBlock Name="tenure" Text="Tenure: " FontSize="10" Margin="2"/>
+                <TextBlock Name="threeYearAvg" Text="Three-year-average: " FontSize="10" Margin="2"/>
+                <TextBlock Name="supervisions" Text="Supervisions" FontSize="10" Margin="2"/>
+                <TextBlock Name="performance" Text="Performance: " FontSize="10" Margin="2"/>
+                <TextBlock Name="degree" Text="Degree: " FontSize="10" Margin="2"/>
+                <TextBlock Name="supervisor" Text="Supervisor: " FontSize="10" Margin="2"/>
+                <TextBlock Name="publi" Text="Publications: " FontSize="10" Margin="2"/>
             </StackPanel>
-       </ListView>
+        </ListView>
+
+        <!-- Publications list -->
+            <ListView Name="PublicationListView" Margin="0,5,0,5" SelectionChanged= "PublicationListView_SelectionChanged" Grid.Column="1" Width="300" Height="150" VerticalAlignment="Bottom">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Publication Date">
+                            <GridViewColumn.DisplayMemberBinding>
+                                <Binding Path="AvailabilityDate" StringFormat="{}{0:MM/dd/yyyy}" />
+                            </GridViewColumn.DisplayMemberBinding>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Publicaiton Title" DisplayMemberBinding="{Binding Title}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+         <!-- DOI; Title; Authors; Publication year; Ranking (one of 'Q1', 'Q2', etc.), Type (one of ‘Conference’,
+‘Journal’ or ‘Other’); Cite as (this is a single string obtained from the Employment and Researcher Database); Availability date (the
+date when the publication was first available, which may differ from the publication year); Age (the days elapsed since the
+publication became available; this can be negative if the availability date is in the future)-->
+        <ListView Name="pubsDetailsView" Grid.Column="2" VerticalAlignment="Top" Height="400">
+            <StackPanel>
+                <TextBlock Name="DOI" Text="DOI: " FontSize="10" Margin="2"/>
+                <TextBlock Name="pubTitle" Text="Publication Title: " FontSize="10" Margin="2"/>
+                <TextBlock Name="authors" Text="Authors: " FontSize="10" Margin="2"/>
+                <TextBlock Name="pubYear" Text="Publication Year: " FontSize="10" Margin="2"/>
+                <TextBlock Name="ranking" Text="Ranking: " FontSize="10" Margin="2"/>
+                <TextBlock Name="pubType" Text="Publication Type: " FontSize="10" Margin="2"/>
+                <TextBlock Name="citeAS" Text="Cite A: " FontSize="10" Margin="2"/>
+                <TextBlock Name="avaDate" Text="Availability Date: " FontSize="10" Margin="2"/>
+                <TextBlock Name="pubAge" Text="Age: " FontSize="10" Margin="2"/>
+            </StackPanel>
+        </ListView>
+        
+
+
+
         <Button x:Name="tempButton" Grid.Column="2" Content="Button" HorizontalAlignment="Left" Margin="189,232,0,0" VerticalAlignment="Top" Click="tempButton_Click"/>
     </Grid>
 </Window>

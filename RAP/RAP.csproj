@@ -60,6 +60,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controll\PublicationsControl.cs" />
+    <Compile Include="DataSource\XMLAdapter.cs" />
     <Compile Include="PerformanceDetailsWindow.xaml.cs">
       <DependentUpon>PerformanceDetailsWindow.xaml</DependentUpon>
     </Compile>
@@ -118,7 +119,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Fundings_Rankings.xml" />
+    <Resource Include="DataSource\Fundings_Rankings.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

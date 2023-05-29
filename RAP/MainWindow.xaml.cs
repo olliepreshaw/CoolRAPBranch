@@ -46,7 +46,7 @@ namespace RAP
                 // researcher details
                 name.Text = "Name: " + selectedResearcher.FirstName + " " + selectedResearcher.LastName;
                 //title not displaying at all, mustn't be pulling from db?
-                title.Text = "Current Job Title: " + selectedResearcher.Title;
+                resTitle.Text = "Current Job Title: " + selectedResearcher.Title;
                 unit.Text = "Unit: " + selectedResearcher.SchoolUnit;
                 Enum campusPr = selectedResearcher.Camp;
                 campus.Text = "Campus: " + campusPr.ToString();
@@ -86,15 +86,16 @@ namespace RAP
         private void tempButton_Click(object sender, RoutedEventArgs e)
         {
             Researcher selectedResearcher = (Researcher)researcherListView.SelectedItem;
-            List<Publication> publications = PublicationsControl.FetchPublications(selectedResearcher);
+            //List<Publication> publications = selectedResearcher.Pubs;
             PerformanceDetailsWindow PdetailsView = new PerformanceDetailsWindow();
-            Researcher.Q1PercentageCalc(selectedResearcher, publications);
 
-            if (selectedResearcher.Type == Researcher.ResearcherType.Staff)
-            {
-                Staff staff = (Staff)researcherListView.SelectedItem;
-                staff.AverageThreeYear(publications);
-            }
+            ResearcherControl.ControllTheDeetails(selectedResearcher);
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            image.UriSource = new Uri(selectedResearcher.PhotoURL);
+            image.EndInit();
+            PdetailsView.profilePic.Source = image;
+
             PdetailsView.DataContext = selectedResearcher;
             PdetailsView.Show();
         }
@@ -105,7 +106,33 @@ namespace RAP
             {
                 Publication selectedPublication = (Publication)PublicationListView.SelectedItem;
 
+                DOI.Text = "Title : " + selectedPublication.DOI;
+                pubTitle.Text = "Publication Title: " + selectedPublication.Title;
+                authors.Text = "Authors: " + selectedPublication.Authors;
+                //pubYear.Text = "Publication Year: " + selectedPublication.year;
+                ranking.Text = "Ranking: " + selectedPublication.Ranking;
+                pubType.Text = "Publication Type: " + selectedPublication.Type;
+                citeAS.Text = "Cite As: " + selectedPublication.CiteAs;
+                avaDate.Text = "Availability Date: " + selectedPublication.AvailabilityDate;
+                //(EndDate - StartDate).TotalDays
+                DateTime now = DateTime.Today;
+                pubAge.Text = "Publication Age: " + (now -selectedPublication.AvailabilityDate).TotalDays;
+
+
                 // Do something with the selected publication
+
+
+
+
+                //< TextBlock Name = "DOI" Text = "DOI: " FontSize = "10" Margin = "2" />
+                //< TextBlock Name = "pubTitle" Text = "Title: " FontSize = "10" Margin = "2" />
+                //< TextBlock Name = "authors" Text = "Authors: " FontSize = "10" Margin = "2" />
+                //< TextBlock Name = "pubYear" Text = "Publication Year: " FontSize = "10" Margin = "2" />
+                //< TextBlock Name = "ranking" Text = "Ranking: " FontSize = "10" Margin = "2" />
+                //< TextBlock Name = "pubType" Text = "Publication Type: " FontSize = "10" Margin = "2" />
+                //< TextBlock Name = "citeAS" Text = "Cite A: " FontSize = "10" Margin = "2" />
+                //< TextBlock Name = "avaDate" Text = "Availability Date: " FontSize = "10" Margin = "2" />
+                //< TextBlock Name = "pubAge" Text = "Age: " FontSize = "10" Margin = "2" />
             }
         }
 

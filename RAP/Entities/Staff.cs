@@ -13,15 +13,15 @@ Supervisions is the number of students the staff member is currently or has prev
 */
 namespace KIT206_RAP.Entites
 {
-    internal class Staff : Researcher
+    public class Staff : Researcher
     {
         
-        public double ExpectedNoPubs { get; set; }
-        public JobTitle Job_Title{ get; set; }
-        public double FundingRecieved { get; set; }
-        public double PerformanceByFunding { get; set; }
+        //public double ExpectedNoPubs { get; set; }
+        //public JobTitle Job_Title{ get; set; }
+        public int FundingRecieved { get; set; }
+        public string PerformanceByFunding { get; set; }
         public double ThreeYearAverage { get; set; }
-        public int PerformanceByPublication { get; set; }
+        public string PerformanceByPublication { get; set; }
         public List<Position> Positions { get; set; }
         // not sure how to handle supervisions, just the researcher id or a name?
         public int SuperCount { get; set; }
@@ -50,22 +50,7 @@ namespace KIT206_RAP.Entites
         {
 
         }
-        public void AverageThreeYear(List<Publication> publications)
-        {
-            //3-year Average is the total number of publications in the previous three whole calendar years, divided by three.
-            int count = 0;
-            int sum = 0;
-            DateTime threeYearsAgo = DateTime.Now.AddYears(-3);
-            foreach (Publication publication in publications)
-            {
-                if (publication.AvailabilityDate >= threeYearsAgo)
-                {
-                    sum++;
-                }
-                count++;
-            }
-            this.ThreeYearAverage = count > 0 ? sum / count : 0;
-        }
+
 
         // calculate performance by funding
         public double PerforByFund(double fundingRecieved)
@@ -77,8 +62,31 @@ namespace KIT206_RAP.Entites
 
         }
 
-        //3-year average
-       
+        public static void AverageThreeYear(Staff staff)
+        {
+            //3-year Average is the total number of publications in the previous three whole calendar years, divided by three.
+            double count = 0;
+            DateTime threeYearsAgo = DateTime.Now.AddYears(-3);
+            foreach (Publication publication in staff.Pubs)
+            {
+                if (publication.AvailabilityDate >= threeYearsAgo)
+                {
+                    count++;
+                }
+            }
+            staff.ThreeYearAverage = Math.Round(count > 0 ? count / 3 : 0, 1);
+        }
+
+        public static void PerfByPub(Staff staff)
+        {
+            staff.PerformanceByPublication = String.Format("{0:0.0}", Math.Round(staff.ThreeYearAverage / staff.ExpectedNoPubs*100,1) +"%");
+        }
+
+        public static void PerfByFund(Staff staff)
+        {
+            staff.PerformanceByFunding = "$"+(Math.Round(staff.FundingRecieved / ((DateTime.Now - staff.CommencedWithInstitution).TotalDays/365), 1)).ToString();
+        }
+
         public static void supervisions()
         {
             // this will probably have to be it's own SQL / LINQ query as we have
@@ -119,17 +127,17 @@ namespace KIT206_RAP.Entites
               }
               */
        
-        /*
-         * struggling to get below enum working
-        public enum ExpectedPublications : double
+        
+         //* struggling to get below enum working
+        public enum ExpectedPublications 
         {
-            LevelA = 0.5,
-            LevelB = 1,
-            LevelC = 2,
-            LevelD = 3.2,
-            LevelE = 4
+            A,
+            B,
+            C,
+            D,
+            E
         }
-        */
+        
 
     }
 }
