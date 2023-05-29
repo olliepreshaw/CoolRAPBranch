@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using KIT206_RAP.Controll;
 using KIT206_RAP.Entites;
+using RAP.Entities;
 
 namespace KIT206_RAP.View
 {
@@ -139,7 +140,6 @@ namespace KIT206_RAP.View
 
             return stuResearchers;
         }
-
         public static List<Staff> FilterByLevel (List<Staff> ResList, Level level)
         {
             if(level.Equals(Level.A))
