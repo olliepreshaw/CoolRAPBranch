@@ -17,6 +17,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using RAP.Controll;
 
+
+// This is a comment, welcom to the word of git
 namespace RAP
 {
     /// <summary>
