@@ -4,19 +4,10 @@ using System.Linq;
 using System.Runtime.Remoting.Activation;
 using System.Text;
 using System.Threading.Tasks;
+using RAP.Entities;
 
 namespace KIT206_RAP.Entites
 {
-    public enum Level
-    { 
-        Student,
-        A, 
-        B, 
-        C, 
-        D, 
-        E 
-    }
- 
     public class Position
     {
         public DateTime StartDate { get; set; }

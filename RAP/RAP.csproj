@@ -41,6 +41,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -61,6 +63,7 @@
     </ApplicationDefinition>
     <Compile Include="Controll\PublicationsControl.cs" />
     <Compile Include="DataSource\XMLAdapter.cs" />
+    <Compile Include="Entities\Level.cs" />
     <Compile Include="PerformanceDetailsWindow.xaml.cs">
       <DependentUpon>PerformanceDetailsWindow.xaml</DependentUpon>
     </Compile>
@@ -110,6 +113,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Properties\DataSources\KIT206_RAP.Entites.Researcher.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
