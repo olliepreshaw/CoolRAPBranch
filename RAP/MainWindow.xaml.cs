@@ -29,6 +29,7 @@ namespace RAP
     {
         private ObservableCollection<Publication> selectedResearcherPublications;
         private ObservableCollection<Researcher> researchers;
+        private List<Publication> publicaitonList;
 
         public BitmapImage ImageData { get; set; }
 
@@ -39,12 +40,12 @@ namespace RAP
             if (researcherListView.SelectedItem != null)
             {
                 Researcher selectedResearcher = (Researcher)researcherListView.SelectedItem;
-                List<Publication> publications = PublicationsControl.FetchPublications(selectedResearcher);
-                DateTime now = DateTime.Today;
-                
+
+                publicaitonList = PublicationsControl.FetchPublications(selectedResearcher);
+
 
                 selectedResearcherPublications.Clear();
-                foreach (var publication in publications)
+                foreach (var publication in publicaitonList)
                 {
                     selectedResearcherPublications.Add(publication);
                 }
@@ -124,9 +125,8 @@ namespace RAP
                 pubType.Text = "Publication Type: " + selectedPublication.Type;
                 citeAS.Text = "Cite As: " + selectedPublication.CiteAs;
                 avaDate.Text = "Availability Date: " + selectedPublication.AvailabilityDate;
-                //(EndDate - StartDate).TotalDays
-                DateTime now = DateTime.Today;
-                pubAge.Text = "Publication Age: " + (now -selectedPublication.AvailabilityDate).TotalDays + " days";
+                pubAge.Text = "Publication Age: " + selectedPublication.Age;
+
 
                 // Do something with the selected publication
                 //< TextBlock Name = "DOI" Text = "DOI: " FontSize = "10" Margin = "2" />
@@ -168,6 +168,36 @@ namespace RAP
             {
                 researcherListView.ItemsSource =  ResearcherControl.FilterName(SearchBox.Text, researchers);
             }
+        }
+
+        private void Submit_Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(FirstNumberTextBox.Text, out int firstNumber) &&
+                    int.TryParse(SecondNumberTextBox.Text, out int secondNumber))
+            {
+                publicaitonList = PublicationsControl.FilterByYear(firstNumber, secondNumber, publicaitonList);
+
+                selectedResearcherPublications.Clear();
+                foreach (var publication in publicaitonList)
+                {
+                    selectedResearcherPublications.Add(publication);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Please enter valid integers.");
+            }
+        }
+
+        private void PublicationDateColumnHeader_Click(object sender, RoutedEventArgs e)
+        {
+                publicaitonList = PublicationsControl.invert_sort(publicaitonList);
+
+                selectedResearcherPublications.Clear();
+                foreach (var publication in publicaitonList)
+                {
+                    selectedResearcherPublications.Add(publication);
+                }
         }
     }
 }
