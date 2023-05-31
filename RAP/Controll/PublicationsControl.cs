@@ -30,6 +30,12 @@ namespace RAP.Controll
         }
         public static List<Publication> FetchPublications(Researcher res)
         {
+            if(res.Pubs.Count > 0)
+            {
+                return null;
+            }
+            else
+            {
             List <Publication> pubs = new List<Publication>();
             pubs = DBAdapter.GetPubs(res);
             // sort by year, most recent first
@@ -38,20 +44,23 @@ namespace RAP.Controll
             pubs = sort_list(pubs);
 
             return pubs;
-        }
+            }
+       }
 
         public static List<Publication> FilterByYear(int year1, int year2, List<Publication> pubList)
         {
             // check first year lower
             int firstYear= Math.Min(year1, year2);
             int secondYear= Math.Max(year1, year2);
+            List<Publication> filteredPubls = new List<Publication>();
             // Filter the publications based on the availability date range
-            var filteredPublications = pubList.Where(p =>
+            filteredPubls= pubList.Where(p =>
                 p.AvailabilityDate.Year >= firstYear &&
                 p.AvailabilityDate.Year <=secondYear 
             ).ToList();
 
-            return filteredPublications;
+
+            return filteredPubls;
         }
     }
 }

@@ -40,6 +40,7 @@ namespace RAP
             if (researcherListView.SelectedItem != null)
             {
                 Researcher selectedResearcher = (Researcher)researcherListView.SelectedItem;
+                selectedResearcher.Pubs.Clear();
                 publicaitonList = PublicationsControl.FetchPublications(selectedResearcher);
 
                 selectedResearcherPublications.Clear();
@@ -47,6 +48,7 @@ namespace RAP
                 {
                     selectedResearcherPublications.Add(publication);
                 }
+
                 // researcher details
                 name.Text = "Name: " + selectedResearcher.FirstName + " " + selectedResearcher.LastName;
                 //title not displaying at all, mustn't be pulling from db?
@@ -182,6 +184,7 @@ namespace RAP
 
         private void PublicationDateColumnHeader_Click(object sender, RoutedEventArgs e)
         {
+
                 publicaitonList = PublicationsControl.invert_sort(publicaitonList);
 
                 selectedResearcherPublications.Clear();
