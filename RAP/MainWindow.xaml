@@ -17,7 +17,7 @@
             <ColumnDefinition Width="293*"/>
             <ColumnDefinition Width="267*"/>
         </Grid.ColumnDefinitions>
-        <ListView Name="researcherListView" Margin="10,79,0,10" SelectionChanged= "researcherListView_SelectionChanged" Grid.RowSpan="2">
+        <ListView Name="researcherListView" Margin="10,79,0,10" SelectionChanged= "researcherListView_SelectionChanged" Grid.RowSpan="2" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}"/>
@@ -54,7 +54,6 @@
                 <TextBlock Name="job" Text="Current job:" FontSize="10" Margin="2"/>
                 <TextBlock Name="commencedInt" Text="Commenced with institution: " FontSize="10" Margin="2" />
                 <TextBlock Name="commencedCurr" Text="Commenced current position: " FontSize="10" Margin="2"/>
-                <TextBlock Name="prevPos" Text="Previous Positions: " FontSize="10" Margin="2"/>
                 <TextBlock Name="tenure" Text="Tenure: " FontSize="10" Margin="2"/>
                 <TextBlock Name="threeYearAvg" Text="Three-year-average: " FontSize="10" Margin="2"/>
                 <TextBlock Name="supervisions" Text="Supervisions" FontSize="10" Margin="2"/>
@@ -75,7 +74,7 @@
                             <Binding Path="AvailabilityDate" StringFormat="{}{0:MM/dd/yyyy}" />
                         </GridViewColumn.DisplayMemberBinding>
                     </GridViewColumn>
-                    <GridViewColumn Header="Publicaiton Title" DisplayMemberBinding="{Binding Title}"/>
+                    <GridViewColumn Header="Publication Title" DisplayMemberBinding="{Binding Title}"/>
                 </GridView>
             </ListView.View>
         </ListView>
@@ -97,7 +96,7 @@ publication became available; this can be negative if the availability date is i
                 <TextBlock Name="pubAge" Text="Age: " FontSize="10" Margin="2"/>
             </StackPanel>
         </ListView>
-        <Button x:Name="tempButton" Grid.Column="2" Content="Button" HorizontalAlignment="Left" Margin="189,43,0,0" VerticalAlignment="Top" Click="tempButton_Click" Grid.Row="1"/>
+        <Button x:Name="tempButton" Grid.Column="2" Content="Display Performance" HorizontalAlignment="Center" Margin="15,43,0,0" VerticalAlignment="Top" Click="tempButton_Click" Grid.Row="1"/>
         <TextBox HorizontalAlignment="Left" Margin="15,44,0,0" TextWrapping="Wrap" Text="Show:" VerticalAlignment="Top" Width="55" Height="29"/>
         <TextBox x:Name="SearchBox" Margin="15,5,5,155" KeyDown="SearchBox_KeyDown" />
     </Grid>

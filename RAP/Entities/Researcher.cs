@@ -64,7 +64,7 @@ namespace KIT206_RAP.Entites
             //positionLevle = CalcPosLevel(lev);
             //Title = title;
             DeriveJobTitle(PositionLevel);
-            }
+        }
         public void DeriveJobTitle(Level level)
         {
             switch (level)
