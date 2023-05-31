@@ -154,9 +154,12 @@ namespace RAP
 
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void SearchBox_KeyDown(object sender, KeyEventArgs e)
         {
-
+            if (e.Key == Key.Enter)
+            {
+                researcherListView.ItemsSource =  ResearcherControl.FilterName(SearchBox.Text, researchers);
+            }
         }
     }
 }
