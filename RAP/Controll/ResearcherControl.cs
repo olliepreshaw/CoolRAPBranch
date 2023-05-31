@@ -12,6 +12,7 @@ using System.Collections;
 using RAP.Entities;
 using RAP;
 using System.Collections.ObjectModel;
+using System.Xml.Linq;
 
 namespace KIT206_RAP.Controll
 {
@@ -64,18 +65,39 @@ namespace KIT206_RAP.Controll
 
             PerformaceDetailsView.PrintPerformanceView(Res);
         }
-        public static List<Researcher> FilterLevel(string lev, ObservableCollection<Researcher> researchers)
+        public static ObservableCollection<Researcher> FilterName(string name, ObservableCollection<Researcher> res)
+        {
+            var filteredCollection = new ObservableCollection<Researcher>();
+            String query = name.ToUpper();
+            if (query != "")
+            {
+                var SelectQuery2 = from entry in res
+                                   where (entry.FirstName.ToUpper().Contains(name)
+                                         || entry.LastName.ToUpper().Contains(name))
+                                   select entry;
+
+                List<Researcher> tempList = SelectQuery2.ToList();
+                
+                tempList.OrderBy(x => x.LastName);
+                filteredCollection = new ObservableCollection<Researcher>(tempList);
+            }
+
+                return filteredCollection;
+
+        }
+
+        public static List<Researcher> FilterLevel(string lev, ObservableCollection<Researcher> res)
         {
             if (lev == "All levels")
             {
                 // Return all researchers
-                return researchers.OrderBy(x => x.LastName).ToList();
+                return res.OrderBy(x => x.LastName).ToList();
             }
             else
             {
                 Level level = (Level)Enum.Parse(typeof(Level), lev);
                 var filteredResearchers =
-                    from entry in researchers
+                    from entry in res
                     where entry.PositionLevel == level
                     select entry;
 
