@@ -19,8 +19,6 @@ namespace KIT206_RAP.Entites
  
     public class Position
     {
-        //COMMENT ME
-        public int testInt = 5;
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public Level Level{ get; set; }

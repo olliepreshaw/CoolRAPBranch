@@ -21,11 +21,7 @@ namespace RAP
 {
     /// <summary>
     /// Interaction logic for PerformanceDetailsWindow.xaml
-    /// </summary>
-    /// 
 
-    ///COMMENT ME
-    /////TAke2
     public partial class PerformanceDetailsWindow : Window
     {
         public PerformanceDetailsWindow()
