@@ -116,9 +116,7 @@ namespace RAP
                 pubType.Text = "Publication Type: " + selectedPublication.Type;
                 citeAS.Text = "Cite As: " + selectedPublication.CiteAs;
                 avaDate.Text = "Availability Date: " + selectedPublication.AvailabilityDate;
-                //(EndDate - StartDate).TotalDays
-                DateTime now = DateTime.Today;
-                pubAge.Text = "Publication Age: " + (now -selectedPublication.AvailabilityDate).TotalDays;
+                pubAge.Text = "Publication Age: " + selectedPublication.Age;
 
                 // Do something with the selected publication
                 //< TextBlock Name = "DOI" Text = "DOI: " FontSize = "10" Margin = "2" />
