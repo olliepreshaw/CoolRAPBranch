@@ -43,6 +43,7 @@ namespace RAP
                 selectedResearcher.Pubs.Clear();
                 publicaitonList = PublicationsControl.FetchPublications(selectedResearcher);
 
+
                 selectedResearcherPublications.Clear();
                 foreach (var publication in publicaitonList)
                 {
@@ -52,7 +53,7 @@ namespace RAP
                 // researcher details
                 name.Text = "Name: " + selectedResearcher.FirstName + " " + selectedResearcher.LastName;
                 //title not displaying at all, mustn't be pulling from db?
-                resTitle.Text = "Current Job Title: " + selectedResearcher.Title;
+                resTitle.Text = "Title: " + selectedResearcher.Title;
                 unit.Text = "Unit: " + selectedResearcher.SchoolUnit;
                 Enum campusPr = selectedResearcher.Camp;
                 campus.Text = "Campus: " + campusPr.ToString();
@@ -64,8 +65,7 @@ namespace RAP
                 
                 commencedCurr.Text = "Commenced current job: " + selectedResearcher.CommenceCurrentPosition.ToString("d");
                 prevPos.Text = "Previous positions: " + selectedResearcher;
-                //double currTenure = CalcTenure(selectedResearcher, selectedResearcher.CommenceCurrentPosition);
-                //tenure.Text = "Tenure: " +  currTenure;
+                tenure.Text = "Tenure: " + Math.Round(((now - selectedResearcher.CommencedWithInstitution).TotalDays)/365, 2) + " years";
                 publi.Text = "Publications: " + selectedResearcher.Pubs.Count;
                 //implement this chris or ill cry
                 //threeYearAvg.Text = "3-year-average: " + selectedResearcher;
@@ -80,6 +80,12 @@ namespace RAP
                     //degree.Text = "Degree: " + selectedResearcher.degree;
                     supervisor.Text = "Supervisor: " + student.Supervisor;
                     degree.Text = "Degree: " + student.Degree;
+                }
+                else if (selectedResearcher is Staff staff)
+                {
+                    threeYearAvg.Text = "3-year-average: " + staff.ThreeYearAverage;
+                    performanceFund.Text = "Performance by Funding: " + "$" + (Math.Round(staff.FundingRecieved / ((DateTime.Now - staff.CommencedWithInstitution).TotalDays / 365), 1)).ToString();
+                    performancePub.Text = "Performance by Funding: " + String.Format("{0:0.0}", Math.Round(staff.ThreeYearAverage / staff.ExpectedNoPubs * 100, 1) + "%");
                 }
                 // image
                 ImageData = new BitmapImage(new Uri(selectedResearcher.PhotoURL));
@@ -111,6 +117,7 @@ namespace RAP
             {
                 Publication selectedPublication = (Publication)PublicationListView.SelectedItem;
 
+
                 DOI.Text = "Title : " + selectedPublication.DOI;
                 pubTitle.Text = "Publication Title: " + selectedPublication.Title;
                 authors.Text = "Authors: " + selectedPublication.Authors;
@@ -120,6 +127,7 @@ namespace RAP
                 citeAS.Text = "Cite As: " + selectedPublication.CiteAs;
                 avaDate.Text = "Availability Date: " + selectedPublication.AvailabilityDate;
                 pubAge.Text = "Publication Age: " + selectedPublication.Age;
+
 
                 // Do something with the selected publication
                 //< TextBlock Name = "DOI" Text = "DOI: " FontSize = "10" Margin = "2" />
