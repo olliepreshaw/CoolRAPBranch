@@ -44,7 +44,7 @@
         </ComboBox>
 
 
-        <ListView Name="researcherDetailsView" Grid.Column="1" VerticalAlignment="Top" Height="307" Grid.RowSpan="2">
+        <ListView Name="researcherDetailsView" Grid.Column="1" VerticalAlignment="Top" Height="284" Grid.RowSpan="2">
             <StackPanel>
                 <TextBlock Name="name" Text="Name: " FontSize="10" Margin="2"/>
                 <TextBlock Name="resTitle" Text="Title: " FontSize="10" Margin="2"/>
@@ -66,15 +66,23 @@
         </ListView>
 
         <!-- Publications list -->
-        <ListView Name="PublicationListView" Margin="0,118,0,0" SelectionChanged= "PublicationListView_SelectionChanged" Grid.Column="1" Height="122" VerticalAlignment="Top" Grid.Row="1">
+
+        <TextBox x:Name="FirstNumberTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="85,105,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="61"/>
+        <TextBox x:Name="SecondNumberTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="0,105,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="75"/>
+
+        <Button Grid.Column="1" Content="filter by year" HorizontalAlignment="Left" Margin="185,105,0,0" Grid.Row="1" VerticalAlignment="Top" Click="Submit_Button_Click"/>
+        <ListView Name="PublicationListView" Margin="0,130,0,0" SelectionChanged= "PublicationListView_SelectionChanged" Grid.Column="1" Height="105" VerticalAlignment="Top" Grid.Row="1">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Publication Date">
+                    <GridViewColumn>
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Content="Publication Date" Click="PublicationDateColumnHeader_Click" />
+                        </GridViewColumn.Header>
                         <GridViewColumn.DisplayMemberBinding>
                             <Binding Path="AvailabilityDate" StringFormat="{}{0:MM/dd/yyyy}" />
                         </GridViewColumn.DisplayMemberBinding>
                     </GridViewColumn>
-                    <GridViewColumn Header="Publicaiton Title" DisplayMemberBinding="{Binding Title}"/>
+                    <GridViewColumn Header="Publication Title" DisplayMemberBinding="{Binding Title}"/>
                 </GridView>
             </ListView.View>
         </ListView>
@@ -83,7 +91,7 @@
 ‘Journal’ or ‘Other’); Cite as (this is a single string obtained from the Employment and Researcher Database); Availability date (the
 date when the publication was first available, which may differ from the publication year); Age (the days elapsed since the
 publication became available; this can be negative if the availability date is in the future)-->
-        <ListView Name="pubsDetailsView" Grid.Column="2" VerticalAlignment="Top" Height="400" Grid.RowSpan="2">
+        <ListView Name="pubsDetailsView" Grid.Column="2" VerticalAlignment="Top" Height="424" Grid.RowSpan="2">
             <StackPanel>
                 <TextBlock Name="DOI" Text="DOI: " FontSize="10" Margin="2"/>
                 <TextBlock Name="pubTitle" Text="Publication Title: " FontSize="10" Margin="2"/>
@@ -96,8 +104,8 @@ publication became available; this can be negative if the availability date is i
                 <TextBlock Name="pubAge" Text="Age: " FontSize="10" Margin="2"/>
             </StackPanel>
         </ListView>
-        <Button x:Name="tempButton" Grid.Column="2" Content="Button" HorizontalAlignment="Left" Margin="189,43,0,0" VerticalAlignment="Top" Click="tempButton_Click" Grid.Row="1"/>
         <TextBox HorizontalAlignment="Left" Margin="15,44,0,0" TextWrapping="Wrap" Text="Show:" VerticalAlignment="Top" Width="55" Height="29"/>
+
         <TextBox x:Name="SearchBox" Margin="15,5,5,155" KeyDown="SearchBox_KeyDown" />
     </Grid>
 </Window>
