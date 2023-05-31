@@ -8,12 +8,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="27*"/>
+            <RowDefinition Height="35*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="240*"/>
             <ColumnDefinition Width="293*"/>
             <ColumnDefinition Width="267*"/>
         </Grid.ColumnDefinitions>
-        <ListView Name="researcherListView" Margin="10,49,0,20" SelectionChanged= "researcherListView_SelectionChanged">
+        <ListView Name="researcherListView" Margin="10,79,0,10" SelectionChanged= "researcherListView_SelectionChanged" Grid.RowSpan="2">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}"/>
@@ -24,11 +28,23 @@
             </ListView.View>
         </ListView>
         <!-- filter by level combo box-->
-        <Image Width="200" Height="200" Source="{Binding ImageData}" />
-        <!-- Lable for Box -->
-        <Label Grid.Row="0" Margin="5, 10, 0, 0" Content="Show:" VerticalAlignment="Top" />
+        <Image Width="200" Height="200" Source="{Binding ImageData}" Margin="20,117,20,117" Grid.RowSpan="2" />
+        <!-- Lable for Box 
+        <TextBox Grid.Row="0" x:Name="SearchBox" TextChanged="SearchBox_KeyUp" Margin="10,19,0,390" />-->
+        <!-- combo box to filter list by level, this should be linked to the enum, however could not work out how to 
+        "improt" the package -->
+        <ComboBox Name="LevelFilterComboBox" SelectionChanged="LevelFilterComboBox_SelectionChanged" Margin="75,44,10,115">
+            <ComboBoxItem Content="Student" />
+            <ComboBoxItem Content="A" />
+            <ComboBoxItem Content="B" />
+            <ComboBoxItem Content="C" />
+            <ComboBoxItem Content="D" />
+            <ComboBoxItem Content="E" />
+            <ComboBoxItem Content="All levels" />
+        </ComboBox>
 
-        <ListView Name="researcherDetailsView" Grid.Column="1" VerticalAlignment="Top" Height="400">
+
+        <ListView Name="researcherDetailsView" Grid.Column="1" VerticalAlignment="Top" Height="400" Grid.RowSpan="2">
             <StackPanel>
                 <TextBlock Name="name" Text="Name: " FontSize="10" Margin="2"/>
                 <TextBlock Name="resTitle" Text="Title: " FontSize="10" Margin="2"/>
@@ -42,7 +58,8 @@
                 <TextBlock Name="tenure" Text="Tenure: " FontSize="10" Margin="2"/>
                 <TextBlock Name="threeYearAvg" Text="Three-year-average: " FontSize="10" Margin="2"/>
                 <TextBlock Name="supervisions" Text="Supervisions" FontSize="10" Margin="2"/>
-                <TextBlock Name="performance" Text="Performance: " FontSize="10" Margin="2"/>
+                <TextBlock Name="performanceFund" Text="Performance by Funding: " FontSize="10" Margin="2"/>
+                <TextBlock Name="performancePub" Text="Performance by Pub: " FontSize="10" Margin="2"/>
                 <TextBlock Name="degree" Text="Degree: " FontSize="10" Margin="2"/>
                 <TextBlock Name="supervisor" Text="Supervisor: " FontSize="10" Margin="2"/>
                 <TextBlock Name="publi" Text="Publications: " FontSize="10" Margin="2"/>
@@ -50,24 +67,24 @@
         </ListView>
 
         <!-- Publications list -->
-            <ListView Name="PublicationListView" Margin="0,5,0,5" SelectionChanged= "PublicationListView_SelectionChanged" Grid.Column="1" Width="300" Height="150" VerticalAlignment="Bottom">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Publication Date">
-                            <GridViewColumn.DisplayMemberBinding>
-                                <Binding Path="AvailabilityDate" StringFormat="{}{0:MM/dd/yyyy}" />
-                            </GridViewColumn.DisplayMemberBinding>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Publicaiton Title" DisplayMemberBinding="{Binding Title}"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+        <ListView Name="PublicationListView" Margin="0,0,260,5" SelectionChanged= "PublicationListView_SelectionChanged" Grid.Column="1" Width="300" Height="150" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Grid.Row="1">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Publication Date">
+                        <GridViewColumn.DisplayMemberBinding>
+                            <Binding Path="AvailabilityDate" StringFormat="{}{0:MM/dd/yyyy}" />
+                        </GridViewColumn.DisplayMemberBinding>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Publicaiton Title" DisplayMemberBinding="{Binding Title}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
 
-         <!-- DOI; Title; Authors; Publication year; Ranking (one of 'Q1', 'Q2', etc.), Type (one of ‘Conference’,
+        <!-- DOI; Title; Authors; Publication year; Ranking (one of 'Q1', 'Q2', etc.), Type (one of ‘Conference’,
 ‘Journal’ or ‘Other’); Cite as (this is a single string obtained from the Employment and Researcher Database); Availability date (the
 date when the publication was first available, which may differ from the publication year); Age (the days elapsed since the
 publication became available; this can be negative if the availability date is in the future)-->
-        <ListView Name="pubsDetailsView" Grid.Column="2" VerticalAlignment="Top" Height="400">
+        <ListView Name="pubsDetailsView" Grid.Column="2" VerticalAlignment="Top" Height="400" Grid.RowSpan="2">
             <StackPanel>
                 <TextBlock Name="DOI" Text="DOI: " FontSize="10" Margin="2"/>
                 <TextBlock Name="pubTitle" Text="Publication Title: " FontSize="10" Margin="2"/>
@@ -80,10 +97,8 @@ publication became available; this can be negative if the availability date is i
                 <TextBlock Name="pubAge" Text="Age: " FontSize="10" Margin="2"/>
             </StackPanel>
         </ListView>
-        
-
-
-
-        <Button x:Name="tempButton" Grid.Column="2" Content="Button" HorizontalAlignment="Left" Margin="189,232,0,0" VerticalAlignment="Top" Click="tempButton_Click"/>
+        <Button x:Name="tempButton" Grid.Column="2" Content="Button" HorizontalAlignment="Left" Margin="189,43,0,0" VerticalAlignment="Top" Click="tempButton_Click" Grid.Row="1"/>
+        <TextBox HorizontalAlignment="Left" Margin="15,44,0,0" TextWrapping="Wrap" Text="Show:" VerticalAlignment="Top" Width="55" Height="29"/>
+        <TextBox x:Name="SearchBox" Margin="15,5,5,155" KeyDown="SearchBox_KeyDown" />
     </Grid>
 </Window>

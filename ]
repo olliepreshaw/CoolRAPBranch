@@ -1,4 +1,4 @@
-﻿using KIT206_RAP.Entites;
+using KIT206_RAP.Entites;
 using KIT206_RAP.Controll;
 using System;
 using System.Collections.Generic;
@@ -16,10 +16,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using RAP.Controll;
-using RAP.Entities;
 
 
-// This is a comment, welcom to the word of git
 namespace RAP
 {
     /// <summary>
@@ -40,8 +38,6 @@ namespace RAP
             {
                 Researcher selectedResearcher = (Researcher)researcherListView.SelectedItem;
                 List<Publication> publications = PublicationsControl.FetchPublications(selectedResearcher);
-                DateTime now = DateTime.Today;
-                
 
                 selectedResearcherPublications.Clear();
                 foreach (var publication in publications)
@@ -51,7 +47,7 @@ namespace RAP
                 // researcher details
                 name.Text = "Name: " + selectedResearcher.FirstName + " " + selectedResearcher.LastName;
                 //title not displaying at all, mustn't be pulling from db?
-                resTitle.Text = "Title: " + selectedResearcher.Title;
+                resTitle.Text = "Current Job Title: " + selectedResearcher.Title;
                 unit.Text = "Unit: " + selectedResearcher.SchoolUnit;
                 Enum campusPr = selectedResearcher.Camp;
                 campus.Text = "Campus: " + campusPr.ToString();
@@ -63,7 +59,8 @@ namespace RAP
                 
                 commencedCurr.Text = "Commenced current job: " + selectedResearcher.CommenceCurrentPosition.ToString("d");
                 prevPos.Text = "Previous positions: " + selectedResearcher;
-                tenure.Text = "Tenure: " + Math.Round(((now - selectedResearcher.CommencedWithInstitution).TotalDays)/365, 2) + " years";
+                //double currTenure = CalcTenure(selectedResearcher, selectedResearcher.CommenceCurrentPosition);
+                //tenure.Text = "Tenure: " +  currTenure;
                 publi.Text = "Publications: " + selectedResearcher.Pubs.Count;
                 //implement this chris or ill cry
                 //threeYearAvg.Text = "3-year-average: " + selectedResearcher;
@@ -79,12 +76,6 @@ namespace RAP
                     supervisor.Text = "Supervisor: " + student.Supervisor;
                     degree.Text = "Degree: " + student.Degree;
                 }
-                else if (selectedResearcher is Staff staff)
-                {
-                    threeYearAvg.Text = "3-year-average: " + staff.ThreeYearAverage;
-                    performanceFund.Text = "Performance by Funding: " + "$" + (Math.Round(staff.FundingRecieved / ((DateTime.Now - staff.CommencedWithInstitution).TotalDays / 365), 1)).ToString();
-                    performancePub.Text = "Performance by Funding: " + String.Format("{0:0.0}", Math.Round(staff.ThreeYearAverage / staff.ExpectedNoPubs * 100, 1) + "%");
-                }
                 // image
                 ImageData = new BitmapImage(new Uri(selectedResearcher.PhotoURL));
 
@@ -96,6 +87,7 @@ namespace RAP
         private void tempButton_Click(object sender, RoutedEventArgs e)
         {
             Researcher selectedResearcher = (Researcher)researcherListView.SelectedItem;
+            //List<Publication> publications = selectedResearcher.Pubs;
             PerformanceDetailsWindow PdetailsView = new PerformanceDetailsWindow();
 
             ResearcherControl.ControllTheDeetails(selectedResearcher);
@@ -115,7 +107,6 @@ namespace RAP
             {
                 Publication selectedPublication = (Publication)PublicationListView.SelectedItem;
 
-
                 DOI.Text = "Title : " + selectedPublication.DOI;
                 pubTitle.Text = "Publication Title: " + selectedPublication.Title;
                 authors.Text = "Authors: " + selectedPublication.Authors;
@@ -126,9 +117,14 @@ namespace RAP
                 avaDate.Text = "Availability Date: " + selectedPublication.AvailabilityDate;
                 //(EndDate - StartDate).TotalDays
                 DateTime now = DateTime.Today;
-                pubAge.Text = "Publication Age: " + (now -selectedPublication.AvailabilityDate).TotalDays + " days";
+                pubAge.Text = "Publication Age: " + (now -selectedPublication.AvailabilityDate).TotalDays;
+
 
                 // Do something with the selected publication
+
+
+
+
                 //< TextBlock Name = "DOI" Text = "DOI: " FontSize = "10" Margin = "2" />
                 //< TextBlock Name = "pubTitle" Text = "Title: " FontSize = "10" Margin = "2" />
                 //< TextBlock Name = "authors" Text = "Authors: " FontSize = "10" Margin = "2" />
@@ -143,31 +139,50 @@ namespace RAP
 
         public MainWindow()
         {
-            researchers= new ObservableCollection<Researcher>(ResearcherControl.FetchResearchers());
+            researchers = new ObservableCollection<Researcher>(ResearcherControl.FetchResearchers());
             selectedResearcherPublications = new ObservableCollection<Publication>();
             InitializeComponent();
             researcherListView.ItemsSource = researchers;
             PublicationListView.ItemsSource = selectedResearcherPublications;
-            
-        }
-                private void LevelFilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBox comboBox = (ComboBox)sender;
-            ComboBoxItem selectedItem = (ComboBoxItem)comboBox.SelectedItem;
+            < DockPanel >
 
-            string selectedLevel = selectedItem.Content.ToString();
+        < Label Content = "Researchers" DockPanel.Dock = "Top" />
 
-            researcherListView.ItemsSource = ResearcherControl.FilterLevel(selectedLevel, researchers);
-            
+        < DockPanel DockPanel.Dock = "Top" >
+            < Label Content = "Filter by name:" VerticalContentAlignment = "Bottom" />
+            < TextBox x: Name = "SearchBox" IsReadOnly = "False"  Margin = "5" />
+        </ DockPanel >
 
-        }
+        < Label > Show:</ Label >
+        < ComboBox Name = "ResearcherFilter" DockPanel.Dock = "Top" SelectionChanged = "ResearcherFilter_SelectionChanged" ItemsSource = "{Binding Source= EmploymentLevel {StaticResource EmploymentLevel}}" >
 
-        private void SearchBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                researcherListView.ItemsSource =  ResearcherControl.FilterName(SearchBox.Text, researchers);
-            }
+            < ComboBox.ItemTemplate >
+                < DataTemplate >
+                    < TextBlock Text = "{Binding Path=EmploymentLevel}" />
+
+
+                </ DataTemplate >
+            </ ComboBox.ItemTemplate >
+        </ ComboBox >
+
+        < !--The list-- >
+        < ListBox  x: Name = "ResearcherList" SelectionChanged = "ResearcherList_SelectionChanged" ScrollViewer.VerticalScrollBarVisibility = "Auto" >
+            < ListBox.ItemTemplate >
+                < DataTemplate >
+                    < TextBlock >
+                        < TextBlock.Text >
+                            < MultiBinding StringFormat = "{}{0}, {1} ({2})" >
+                                < Binding Path = "FamilyName" />
+                                < Binding Path = "GivenName" />
+                                < Binding Path = "Title" />
+                            </ MultiBinding >
+                        </ TextBlock.Text >
+                    </ TextBlock >
+                </ DataTemplate >
+            </ ListBox.ItemTemplate >
+        </ ListBox >
+
+    </ DockPanel >
         }
     }
 }

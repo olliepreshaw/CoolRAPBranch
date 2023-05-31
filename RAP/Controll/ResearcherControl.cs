@@ -9,11 +9,17 @@ using System.Threading.Tasks;
 using KIT206_RAP.View;
 using System.Windows;
 using System.Collections;
+using RAP.Entities;
+using RAP;
+using System.Collections.ObjectModel;
+using System.Xml.Linq;
 
 namespace KIT206_RAP.Controll
 {
     internal class ResearcherControl
     {
+        public static List<Researcher> Researchers { get; private set; }
+        public static Researcher CurrentResearcher { get; private set; }
         // UC8
         public static List<Researcher> FetchResearchers()
         {
@@ -59,16 +65,54 @@ namespace KIT206_RAP.Controll
 
             PerformaceDetailsView.PrintPerformanceView(Res);
         }
-
-        public static List<Researcher> FilterLevel(Level level, List<Researcher> ResList)
+        public static ObservableCollection<Researcher> FilterName(string name, ObservableCollection<Researcher> res)
         {
+            var filteredCollection = new ObservableCollection<Researcher>();
+            String query = name.ToUpper();
+            if (query != "")
+            {
+                var SelectQuery2 = from entry in res
+                                   where (entry.FirstName.ToUpper().Contains(name)
+                                         || entry.LastName.ToUpper().Contains(name))
+                                   select entry;
 
-            return ResList;
+                List<Researcher> tempList = SelectQuery2.ToList();
+                
+                tempList.OrderBy(x => x.LastName);
+                filteredCollection = new ObservableCollection<Researcher>(tempList);
+            }
 
+                return filteredCollection;
 
         }
 
-        
+        public static List<Researcher> FilterLevel(string lev, ObservableCollection<Researcher> res)
+        {
+            if (lev == "All levels")
+            {
+                // Return all researchers
+                return res.OrderBy(x => x.LastName).ToList();
+            }
+            else
+            {
+                Level level = (Level)Enum.Parse(typeof(Level), lev);
+                var filteredResearchers =
+                    from entry in res
+                    where entry.PositionLevel == level
+                    select entry;
+
+                return filteredResearchers.OrderBy(x => x.LastName).ToList();
+            }
+        }
+
+
+        // can't pass an obersevable collection, so just pass the list and update the obs coll
+        // back in the main
+        public static void FilterList(List<Researcher> ResList, string searchText)
+        {
+            
+
+        }
 
         public static void ControllTheDeetails(Researcher researcher)
         {

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Schema;
 using static KIT206_RAP.Entites.Researcher;
+using RAP.Entities;
 
 namespace KIT206_RAP.Entites
 
