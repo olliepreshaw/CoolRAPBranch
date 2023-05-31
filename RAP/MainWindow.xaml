@@ -58,7 +58,8 @@
                 <TextBlock Name="tenure" Text="Tenure: " FontSize="10" Margin="2"/>
                 <TextBlock Name="threeYearAvg" Text="Three-year-average: " FontSize="10" Margin="2"/>
                 <TextBlock Name="supervisions" Text="Supervisions" FontSize="10" Margin="2"/>
-                <TextBlock Name="performance" Text="Performance: " FontSize="10" Margin="2"/>
+                <TextBlock Name="performanceFund" Text="Performance by Funding: " FontSize="10" Margin="2"/>
+                <TextBlock Name="performancePub" Text="Performance by Pub: " FontSize="10" Margin="2"/>
                 <TextBlock Name="degree" Text="Degree: " FontSize="10" Margin="2"/>
                 <TextBlock Name="supervisor" Text="Supervisor: " FontSize="10" Margin="2"/>
                 <TextBlock Name="publi" Text="Publications: " FontSize="10" Margin="2"/>
