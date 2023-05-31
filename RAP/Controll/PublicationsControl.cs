@@ -11,6 +11,7 @@ namespace RAP.Controll
 {
     internal class PublicationsControl
     {
+
         public static List<Publication> invert_sort(List<Publication> pubList)
         {   // year is being sorted correctly, however the alphabetical sorting for publications with the
             // same year is not funcitonal
@@ -18,7 +19,9 @@ namespace RAP.Controll
                               .ThenBy(item => item.Title, StringComparer.OrdinalIgnoreCase)
                               .ToList();
             return orderedList;
+
         }
+ 
 
         public static List<Publication> sort_list(List<Publication> pubList)
         {   // year is being sorted correctly, however the alphabetical sorting for publications with the
@@ -27,6 +30,7 @@ namespace RAP.Controll
                               .ThenBy(item => item.Title, StringComparer.OrdinalIgnoreCase)
                               .ToList();
             return orderedList;
+
         }
         public static List<Publication> FetchPublications(Researcher res)
         {
@@ -36,6 +40,7 @@ namespace RAP.Controll
             // if same year, alphabetically
 
             pubs = sort_list(pubs);
+
 
             return pubs;
         }
