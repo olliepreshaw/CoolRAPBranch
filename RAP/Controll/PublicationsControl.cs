@@ -12,6 +12,17 @@ namespace RAP.Controll
     internal class PublicationsControl
     {
 
+        public static List<Publication> invert_sort(List<Publication> pubList)
+        {   // year is being sorted correctly, however the alphabetical sorting for publications with the
+            // same year is not funcitonal
+            List<Publication> orderedList = pubList.OrderBy(item => item.AvailabilityDate.Year)
+                              .ThenBy(item => item.Title, StringComparer.OrdinalIgnoreCase)
+                              .ToList();
+            return orderedList;
+
+        }
+ 
+
         public static List<Publication> sort_list(List<Publication> pubList)
         {   // year is being sorted correctly, however the alphabetical sorting for publications with the
             // same year is not funcitonal
