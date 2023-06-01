@@ -13,6 +13,7 @@ using RAP.Entities;
 using RAP;
 using System.Collections.ObjectModel;
 using System.Xml.Linq;
+using System.Runtime.Versioning;
 
 namespace KIT206_RAP.Controll
 {
@@ -108,10 +109,25 @@ namespace KIT206_RAP.Controll
 
         // can't pass an obersevable collection, so just pass the list and update the obs coll
         // back in the main
-        public static void FilterList(List<Researcher> ResList, string searchText)
+        public static List<Researcher> FilterList(ObservableCollection<Researcher> ResList, string searchText)
         {
-            
+            List<Researcher> filteredList = new List<Researcher>();
+            string tempFirstName;
+            string tempLastName;
 
+            searchText = searchText.ToLower();
+
+            foreach (Researcher researcher in ResList)
+            {
+                tempFirstName = researcher.FirstName.ToLower();
+                tempLastName = researcher.LastName.ToLower();
+                if (tempFirstName.Contains(searchText) || tempLastName.Contains(searchText))
+                {
+                    filteredList.Add(researcher);
+                }
+            }
+
+            return filteredList;
         }
 
         public static void ControllTheDeetails(Researcher researcher)
