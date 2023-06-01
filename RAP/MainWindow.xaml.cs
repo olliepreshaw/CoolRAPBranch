@@ -29,6 +29,7 @@ namespace RAP
     {
         private ObservableCollection<Publication> selectedResearcherPublications;
         private ObservableCollection<Researcher> researchers;
+        private List<Publication> publicaitonList;
 
         public BitmapImage ImageData { get; set; }
 
@@ -39,12 +40,13 @@ namespace RAP
             if (researcherListView.SelectedItem != null)
             {
                 Researcher selectedResearcher = (Researcher)researcherListView.SelectedItem;
-                List<Publication> publications = PublicationsControl.FetchPublications(selectedResearcher);
-                DateTime now = DateTime.Today;
-                
+
+                publicaitonList = PublicationsControl.FetchPublications(selectedResearcher);
+                DateTime now = DateTime.Now;
+
 
                 selectedResearcherPublications.Clear();
-                foreach (var publication in publications)
+                foreach (var publication in publicaitonList)
                 {
                     selectedResearcherPublications.Add(publication);
                 }
@@ -60,33 +62,36 @@ namespace RAP
                 job.Text = "Job: " + selectedResearcher.Job_Title;
                 
                 commencedInt.Text = "Commenced with institution: " + selectedResearcher.CommencedWithInstitution.ToString("d");
-                
                 commencedCurr.Text = "Commenced current job: " + selectedResearcher.CommenceCurrentPosition.ToString("d");
-                prevPos.Text = "Previous positions: " + selectedResearcher;
                 tenure.Text = "Tenure: " + Math.Round(((now - selectedResearcher.CommencedWithInstitution).TotalDays)/365, 2) + " years";
                 publi.Text = "Publications: " + selectedResearcher.Pubs.Count;
-                //implement this chris or ill cry
-                //threeYearAvg.Text = "3-year-average: " + selectedResearcher;
-                //cummulative count of sups pls, can't seem to access supervisions?
-                //supervisions.Text = "Job: " + selectedResearcher.;
-                //performance.Text = "Performance: " + selectedResearcher.performancebypublication;
                 if (selectedResearcher is Student student)
                 {
-                    //do student stuff...
-
-                    //can't access student specific fields :(((
-                    //degree.Text = "Degree: " + selectedResearcher.degree;
-                    supervisor.Text = "Supervisor: " + student.Supervisor;
+                    
                     degree.Text = "Degree: " + student.Degree;
+                    supervisions.Text = "Supervisions: N/A";
+                    supervisor.Text = "Supervisor: " + student.Supervisor;
                 }
                 else if (selectedResearcher is Staff staff)
                 {
+                    supervisor.Text = "Supervisor: N/A";
                     threeYearAvg.Text = "3-year-average: " + staff.ThreeYearAverage;
                     performanceFund.Text = "Performance by Funding: " + "$" + (Math.Round(staff.FundingRecieved / ((DateTime.Now - staff.CommencedWithInstitution).TotalDays / 365), 1)).ToString();
-                    performancePub.Text = "Performance by Funding: " + String.Format("{0:0.0}", Math.Round(staff.ThreeYearAverage / staff.ExpectedNoPubs * 100, 1) + "%");
+                    performancePub.Text = "Performance by Publication: " + String.Format("{0:0.0}", Math.Round(staff.ThreeYearAverage / staff.ExpectedNoPubs * 100, 1) + "%");
+                    supervisions.Text = "Supervisions: " + staff.Supervisions; 
                 }
                 // image
-                ImageData = new BitmapImage(new Uri(selectedResearcher.PhotoURL));
+                //ImageData = new BitmapImage(new Uri(selectedResearcher.PhotoURL));
+
+                var photo = new Image();
+
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(selectedResearcher.PhotoURL);
+                bitmap.EndInit();
+                ImageSource imageSource = bitmap;
+
+                ResercherPhoto.Source = imageSource;
 
                 Console.WriteLine("image URL " + selectedResearcher.PhotoURL);
 
@@ -114,8 +119,9 @@ namespace RAP
             if (PublicationListView.SelectedItem != null)
             {
                 Publication selectedPublication = (Publication)PublicationListView.SelectedItem;
+                DateTime now = DateTime.Now;
 
-
+                
                 DOI.Text = "Title : " + selectedPublication.DOI;
                 pubTitle.Text = "Publication Title: " + selectedPublication.Title;
                 authors.Text = "Authors: " + selectedPublication.Authors;
@@ -124,9 +130,8 @@ namespace RAP
                 pubType.Text = "Publication Type: " + selectedPublication.Type;
                 citeAS.Text = "Cite As: " + selectedPublication.CiteAs;
                 avaDate.Text = "Availability Date: " + selectedPublication.AvailabilityDate;
-                //(EndDate - StartDate).TotalDays
-                DateTime now = DateTime.Today;
-                pubAge.Text = "Publication Age: " + (now -selectedPublication.AvailabilityDate).TotalDays + " days";
+                pubAge.Text = "Publication Age: " + (now - selectedPublication.AvailabilityDate).TotalDays + " days";
+
 
                 // Do something with the selected publication
                 //< TextBlock Name = "DOI" Text = "DOI: " FontSize = "10" Margin = "2" />
@@ -168,6 +173,36 @@ namespace RAP
             {
                 researcherListView.ItemsSource =  ResearcherControl.FilterList(researchers, SearchBox.Text);
             }
+        }
+
+        private void Submit_Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(FirstNumberTextBox.Text, out int firstNumber) &&
+                    int.TryParse(SecondNumberTextBox.Text, out int secondNumber))
+            {
+                publicaitonList = PublicationsControl.FilterByYear(firstNumber, secondNumber, publicaitonList);
+
+                selectedResearcherPublications.Clear();
+                foreach (var publication in publicaitonList)
+                {
+                    selectedResearcherPublications.Add(publication);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Please enter valid integers.");
+            }
+        }
+
+        private void PublicationDateColumnHeader_Click(object sender, RoutedEventArgs e)
+        {
+                publicaitonList = PublicationsControl.invert_sort(publicaitonList);
+
+                selectedResearcherPublications.Clear();
+                foreach (var publication in publicaitonList)
+                {
+                    selectedResearcherPublications.Add(publication);
+                }
         }
     }
 }
