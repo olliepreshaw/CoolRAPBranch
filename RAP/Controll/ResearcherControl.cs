@@ -15,6 +15,9 @@ using System.Collections.ObjectModel;
 using System.Xml.Linq;
 using System.Runtime.Versioning;
 using static System.Windows.Forms.AxHost;
+using MySqlX.XDevAPI.Common;
+using System.CodeDom.Compiler;
+using System.Windows.Navigation;
 
 namespace KIT206_RAP.Controll
 {
@@ -66,7 +69,7 @@ namespace KIT206_RAP.Controll
         public static void DisplayPerformanceDetails(Researcher Res)
         {
             // performance details view
-             DBAdapter.GetPubs(Res);
+            DBAdapter.GetPubs(Res);
             // Console.WriteLine(Res.Type);
             // PublicationView.PrintAllPublication(Res);
             //Console.WriteLine(Res.Type);
@@ -95,7 +98,34 @@ namespace KIT206_RAP.Controll
         }
 
 
-           public static void ControllTheDeetails(Researcher researcher)
+
+        // can't pass an obersevable collection, so just pass the list and update the obs coll
+        // back in the main
+        public static List<Researcher> FilterList(ObservableCollection<Researcher> ResList, string searchText)
+        {
+            // List to return. Temp strings to handle case
+            List<Researcher> filteredList = new List<Researcher>();
+            string tempFirstName;
+            string tempLastName;
+            searchText = searchText.ToLower();
+
+            // Loops list searching for matches
+            foreach (Researcher researcher in ResList)
+            {
+                // Handling case
+                tempFirstName = researcher.FirstName.ToLower();
+                tempLastName = researcher.LastName.ToLower();
+
+                // Finding a match adds result to return list
+                if (tempFirstName.Contains(searchText) || tempLastName.Contains(searchText))
+                {
+                    filteredList.Add(researcher);
+                }
+            }
+            return filteredList;
+        }
+
+        public static void ControllTheDeetails(Researcher researcher)
         {
             Researcher.Q1PercentageCalc(researcher);
 
@@ -104,7 +134,7 @@ namespace KIT206_RAP.Controll
                 Staff staff = (Staff)researcher;
                 Staff.AverageThreeYear(staff);
                 Staff.PerfByPub(staff);
-                staff.FundingRecieved=XMLAdapter.LoadFunding(staff);
+                staff.FundingRecieved = XMLAdapter.LoadFunding(staff);
                 Staff.PerfByFund(staff);
             }
         }
@@ -134,9 +164,13 @@ namespace KIT206_RAP.Controll
         }
 
 
-        public static List<Staff> FilterReport(string lev, ObservableCollection<Researcher> researchers)
+        public static List<List<Staff>> SortReport(ObservableCollection<Researcher> researchers)
         {
-            List<Staff> filteredStaff = new List<Staff>();      // Return List
+            List<Staff> Poor = new List<Staff>();
+            List<Staff> B_Expect = new List<Staff>();
+            List<Staff> M_Min = new List<Staff>();
+            List<Staff> Stars = new List<Staff>();
+            List<List<Staff>> results = new List<List<Staff>>();
             Staff staff;                                        // Conversion for Researcher -> Staff
 
             // Loops Full list
@@ -151,42 +185,57 @@ namespace KIT206_RAP.Controll
                     staff.Pubs = DBAdapter.GetPubs(staff);
                     Staff.AverageThreeYear(staff);
                     Staff.PerfByPub(staff);
+                    staff.FundingRecieved = XMLAdapter.LoadFunding(staff);
 
                     // Converts string PerfByPub into a double for math comparisions
                     double.TryParse(staff.PerformanceByPublication.Replace("%", ""), out double result);
 
                     // Determine which report it should be added to
-                    switch (lev)
+                    if (result <= 70.0)
                     {
-                        case "Poor":
-                            if (result <= 70)
-                            {
-                                filteredStaff.Add(staff);
-                            }
-                            break;
-                        case "Below Expectations":
-                            if (result > 70 && result < 110)
-                            {
-                                filteredStaff.Add(staff);
-                            }
-                            break;
-                        case "Meeting Minimum":
-                            if (result >= 110 && result < 200)
-                            {
-                                filteredStaff.Add(staff);
-                            }
-                            break;
-                        case "Star Performers":
-                            if (result >= 200)
-                            {
-                                filteredStaff.Add(staff);
-                            }
-                            break;
+                        Poor.Add(staff);
+                    }
+                    else if (result > 70.0 && result < 110.0)
+                    {
+                        B_Expect.Add(staff);
+                    }
+                    else if (result >= 110.0 && result < 200.0)
+                    {
+                        M_Min.Add(staff);
+                    }
+                    else
+                    {
+                        Stars.Add(staff);
                     }
                 }
             }
-            return filteredStaff;
+            results.Add(Poor);
+            results.Add(B_Expect);
+            results.Add(M_Min);
+            results.Add(Stars);
+            return results;
         }
+
+        public static List<Staff> GenReport(string lev, List<List<Staff>> data)
+        {
+            switch (lev)
+            {
+                case "Poor":
+                    return data[0].OrderBy(x=>x.PerformanceByPublication).ToList();
+                    break;
+                case "Below Expectations":
+                    return data[1].OrderBy(x => x.PerformanceByPublication).ToList();
+                    break;
+                case "Meeting Minimum":
+                    return data[2].OrderByDescending(x => x.PerformanceByPublication).ToList();
+                    break;
+                case "Star Performers":
+                    return data[3].OrderByDescending(x => x.PerformanceByPublication).ToList();
+                    break;
+            }
+            return null;
+         }
+
     }
 
 }

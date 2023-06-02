@@ -17,20 +17,27 @@
             <ComboBoxItem Content="Below Expectations" />
             <ComboBoxItem Content="Meeting Minimum" />
             <ComboBoxItem Content="Star Performers" />
-
-            <ComboBoxItem Content="All levels" />
         </ComboBox>
         <ListView Name="StaffListView" Margin="10,8,0,39" Grid.Row="1" >
             <ListView.View>
                 <GridView>
+                    <GridViewColumn Header="Performance" DisplayMemberBinding="{Binding PerformanceByPublication}"/>
+                    <GridViewColumn Header="Funding">
+                        <GridViewColumn.DisplayMemberBinding>
+                            <MultiBinding StringFormat="{}${0}">
+                                <Binding Path="FundingRecieved" />
+                            </MultiBinding>
+                        </GridViewColumn.DisplayMemberBinding>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Level" DisplayMemberBinding="{Binding PositionLevel}"/>
+                    <GridViewColumn Header="Email" DisplayMemberBinding="{Binding Email}"/>
                     <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}"/>
                     <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}"/>
                     <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}"/>
-                    <GridViewColumn Header="Level" DisplayMemberBinding="{Binding PositionLevel}"/>
-                    <GridViewColumn Header="Email" DisplayMemberBinding="{Binding Email}"/>
-                    <GridViewColumn Header="Performance" DisplayMemberBinding="{Binding PerformanceByPublication}"/>
                 </GridView>
             </ListView.View>
         </ListView>
+        <Button Content="Copy Emails" HorizontalAlignment="Left"  Height="15" Width="60" FontSize="9" Margin="250,0,0,0" VerticalAlignment="Center" Click="Button_Copy_Email_Click"/>
+        <TextBox HorizontalAlignment="Left" Height="18" Margin="10,0,0,0" TextWrapping="Wrap" Text="Select Report" VerticalAlignment="Center" Width="79"/>
     </Grid>
 </Window>
