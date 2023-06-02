@@ -57,12 +57,6 @@ namespace KIT206_RAP.Entites
             CommenceCurrentPosition = curretn_start;
             PositionLevel = (Level)Enum.Parse(typeof(Level), lev);
             Console.WriteLine(firstName + "..." + PositionLevel);
-            // could call the GetPubs here in the constructor if we wanted, get the pubs when we
-            // create the researcher if we want...
-
-            //photoPlaceHolder = FetchPhoto();
-            //positionLevle = CalcPosLevel(lev);
-            //Title = title;
             DeriveJobTitle(PositionLevel);
             }
         public void DeriveJobTitle(Level level)

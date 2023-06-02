@@ -19,6 +19,7 @@ using RAP.Controll;
 using RAP.Entities;
 
 
+
 // This is a comment, welcom to the word of git
 namespace RAP
 {
@@ -30,6 +31,7 @@ namespace RAP
         private ObservableCollection<Publication> selectedResearcherPublications;
         private ObservableCollection<Researcher> researchers;
         private List<Publication> publicaitonList;
+        private List<Researcher> resList;
 
         public BitmapImage ImageData { get; set; }
 
@@ -40,11 +42,10 @@ namespace RAP
             if (researcherListView.SelectedItem != null)
             {
                 Researcher selectedResearcher = (Researcher)researcherListView.SelectedItem;
+                ResearcherControl.DisplayResearcherDetails(selectedResearcher, resList);
                 selectedResearcher.Pubs.Clear();
                 publicaitonList = PublicationsControl.FetchPublications(selectedResearcher);
-
-
-                selectedResearcherPublications.Clear();
+                                selectedResearcherPublications.Clear();
                 foreach (var publication in publicaitonList)
                 {
                     selectedResearcherPublications.Add(publication);
@@ -65,7 +66,7 @@ namespace RAP
                 
                 commencedCurr.Text = "Commenced current job: " + selectedResearcher.CommenceCurrentPosition.ToString("d");
                 prevPos.Text = "Previous positions: " + selectedResearcher;
-                tenure.Text = "Tenure: " + Math.Round(((now - selectedResearcher.CommencedWithInstitution).TotalDays)/365, 2) + " years";
+                tenure.Text = "Tenure: ";
                 publi.Text = "Publications: " + selectedResearcher.Pubs.Count;
                 //implement this chris or ill cry
                 //threeYearAvg.Text = "3-year-average: " + selectedResearcher;
@@ -74,10 +75,6 @@ namespace RAP
                 //performance.Text = "Performance: " + selectedResearcher.performancebypublication;
                 if (selectedResearcher is Student student)
                 {
-                    //do student stuff...
-
-                    //can't access student specific fields :(((
-                    //degree.Text = "Degree: " + selectedResearcher.degree;
                     supervisor.Text = "Supervisor: " + student.Supervisor;
                     degree.Text = "Degree: " + student.Degree;
                 }
@@ -87,7 +84,6 @@ namespace RAP
                     performanceFund.Text = "Performance by Funding: " + "$" + (Math.Round(staff.FundingRecieved / ((DateTime.Now - staff.CommencedWithInstitution).TotalDays / 365), 1)).ToString();
                     performancePub.Text = "Performance by Funding: " + String.Format("{0:0.0}", Math.Round(staff.ThreeYearAverage / staff.ExpectedNoPubs * 100, 1) + "%");
                 }
-                // image
                 ImageData = new BitmapImage(new Uri(selectedResearcher.PhotoURL));
 
                 Console.WriteLine("image URL " + selectedResearcher.PhotoURL);
@@ -127,24 +123,13 @@ namespace RAP
                 citeAS.Text = "Cite As: " + selectedPublication.CiteAs;
                 avaDate.Text = "Availability Date: " + selectedPublication.AvailabilityDate;
                 pubAge.Text = "Publication Age: " + selectedPublication.Age;
-
-
-                // Do something with the selected publication
-                //< TextBlock Name = "DOI" Text = "DOI: " FontSize = "10" Margin = "2" />
-                //< TextBlock Name = "pubTitle" Text = "Title: " FontSize = "10" Margin = "2" />
-                //< TextBlock Name = "authors" Text = "Authors: " FontSize = "10" Margin = "2" />
-                //< TextBlock Name = "pubYear" Text = "Publication Year: " FontSize = "10" Margin = "2" />
-                //< TextBlock Name = "ranking" Text = "Ranking: " FontSize = "10" Margin = "2" />
-                //< TextBlock Name = "pubType" Text = "Publication Type: " FontSize = "10" Margin = "2" />
-                //< TextBlock Name = "citeAS" Text = "Cite A: " FontSize = "10" Margin = "2" />
-                //< TextBlock Name = "avaDate" Text = "Availability Date: " FontSize = "10" Margin = "2" />
-                //< TextBlock Name = "pubAge" Text = "Age: " FontSize = "10" Margin = "2" />
-            }
+                }
         }
 
         public MainWindow()
         {
-            researchers= new ObservableCollection<Researcher>(ResearcherControl.FetchResearchers());
+            resList = ResearcherControl.FetchResearchers();
+            researchers= new ObservableCollection<Researcher>(resList);
             selectedResearcherPublications = new ObservableCollection<Publication>();
             InitializeComponent();
             researcherListView.ItemsSource = researchers;
@@ -159,8 +144,6 @@ namespace RAP
             string selectedLevel = selectedItem.Content.ToString();
 
             researcherListView.ItemsSource = ResearcherControl.FilterLevel(selectedLevel, researchers);
-            
-
         }
 
         private void SearchBox_KeyDown(object sender, KeyEventArgs e)

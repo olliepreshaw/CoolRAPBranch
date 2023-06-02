@@ -23,25 +23,18 @@ namespace KIT206_RAP.Entites
         public double ThreeYearAverage { get; set; }
         public string PerformanceByPublication { get; set; }
         public List<Position> Positions { get; set; }
-        // not sure how to handle supervisions, just the researcher id or a name?
         public int SuperCount { get; set; }
-        public List<Student> Supervisions { get; set; }
         // want to make this an enum
         public string level { get; set; }
+        public string StudentsSupervised { get; set; }
 
             
        // Constructor
         public Staff(int id, string type, string firstName, string lastName, string title, string schoolUnit, string campHouse, string email, string photURL, string lev, DateTime utas_start, DateTime curretn_start)
             : base( id, type, firstName, lastName, title, schoolUnit, campHouse, email, photURL, utas_start, curretn_start, lev)
         {
-            // will have to ping the database with something like get all students with "researcher name" as supervisor
-            // this currently happens in the 
-            level = lev;
+                        level = lev;
             Positions = new List<Position>();
-            Supervisions = new List<Student>();
-            //ThreeYearAverage = AverageThreeYear();
-            //double funding = 100;
-
         }
 
         
@@ -86,49 +79,6 @@ namespace KIT206_RAP.Entites
         {
             staff.PerformanceByFunding = "$"+(Math.Round(staff.FundingRecieved / ((DateTime.Now - staff.CommencedWithInstitution).TotalDays/365), 1)).ToString();
         }
-
-        public static void supervisions()
-        {
-            // this will probably have to be it's own SQL / LINQ query as we have
-            // question each student table for it's supervisor
-            // not sure how supervisor is recorded in the DB, maybe they have ID's???
-            // FROM students
-            // GET *
-            // WHERE supervisor = Researcher.lastName
-
-
-        }
-        //supervisions
-
-
-        // calculate performance
-        // calculate perfomeance by publication
-
-        /*
-              public static void Q1PercentageCalc(Researcher researcher, List<Publication> publications)
-              {
-                  int q1Count = 0;
-                  int totalPublications = publications.Count;
-
-                  foreach (Publication publication in publications)
-                  {
-                      if (publication.Ranking == RankingType.Q1)
-                      {
-                          q1Count++;
-                      }
-                  }
-
-                  double percentage = (double)q1Count / totalPublications * 100;
-                  // sets the top global var...
-                  researcher.Q1Percentage = percentage;
-                  Console.WriteLine(researcher.Q1Percentage);
-                  Console.WriteLine(researcher.Q1Percentage);
-                  Console.WriteLine(researcher.Q1Percentage);
-              }
-              */
-       
-        
-         //* struggling to get below enum working
         public enum ExpectedPublications 
         {
             A,
