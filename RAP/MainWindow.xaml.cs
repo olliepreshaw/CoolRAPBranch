@@ -20,6 +20,7 @@ using RAP.Entities;
 using System.Linq.Expressions;
 
 
+
 // This is a comment, welcom to the word of git
 namespace RAP
 {
@@ -31,6 +32,7 @@ namespace RAP
         private ObservableCollection<Publication> selectedResearcherPublications;
         private ObservableCollection<Researcher> researchers;
         private List<Publication> publicaitonList;
+        private List<Researcher> resList;
 
         public BitmapImage ImageData { get; set; }
 
@@ -41,16 +43,17 @@ namespace RAP
             if (researcherListView.SelectedItem != null)
             {
                 Researcher selectedResearcher = (Researcher)researcherListView.SelectedItem;
-
+                ResearcherControl.DisplayResearcherDetails(selectedResearcher, resList);
+                selectedResearcher.Pubs.Clear();
                 publicaitonList = PublicationsControl.FetchPublications(selectedResearcher);
-                DateTime now = DateTime.Now;
-
 
                 selectedResearcherPublications.Clear();
+
                 foreach (var publication in publicaitonList)
                 {
                     selectedResearcherPublications.Add(publication);
                 }
+
                 // researcher details
                 name.Text = "Name: " + selectedResearcher.FirstName + " " + selectedResearcher.LastName;
                 //title not displaying at all, mustn't be pulling from db?
@@ -64,11 +67,13 @@ namespace RAP
                 
                 commencedInt.Text = "Commenced with institution: " + selectedResearcher.CommencedWithInstitution.ToString("d");
                 commencedCurr.Text = "Commenced current job: " + selectedResearcher.CommenceCurrentPosition.ToString("d");
-                tenure.Text = "Tenure: " + Math.Round(((now - selectedResearcher.CommencedWithInstitution).TotalDays)/365, 2) + " years";
+
+                prevPos.Text = "Previous positions: " + selectedResearcher;
+                tenure.Text = "Tenure: ";
+
                 publi.Text = "Publications: " + selectedResearcher.Pubs.Count;
                 if (selectedResearcher is Student student)
                 {
-                    
                     degree.Text = "Degree: " + student.Degree;
                     supervisions.Text = "Supervisions: N/A";
                     supervisor.Text = "Supervisor: " + student.Supervisor;
@@ -81,18 +86,9 @@ namespace RAP
                     performancePub.Text = "Performance by Publication: " + String.Format("{0:0.0}", Math.Round(staff.ThreeYearAverage / staff.ExpectedNoPubs * 100, 1) + "%");
                     supervisions.Text = "Supervisions: " + staff.Supervisions.Count; 
                 }
-                // image
-                //ImageData = new BitmapImage(new Uri(selectedResearcher.PhotoURL));
 
-                var photo = new Image();
+                ImageData = new BitmapImage(new Uri(selectedResearcher.PhotoURL));
 
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri(selectedResearcher.PhotoURL);
-                bitmap.EndInit();
-                ImageSource imageSource = bitmap;
-
-                ResercherPhoto.Source = imageSource;
 
                 Console.WriteLine("image URL " + selectedResearcher.PhotoURL);
 
@@ -137,32 +133,23 @@ namespace RAP
                 pubType.Text = "Publication Type: " + selectedPublication.Type;
                 citeAS.Text = "Cite As: " + selectedPublication.CiteAs;
                 avaDate.Text = "Availability Date: " + selectedPublication.AvailabilityDate;
-                pubAge.Text = "Publication Age: " + (now - selectedPublication.AvailabilityDate).TotalDays + " days";
 
+                pubAge.Text = "Publication Age: " + selectedPublication.Age;
+             }
 
-                // Do something with the selected publication
-                //< TextBlock Name = "DOI" Text = "DOI: " FontSize = "10" Margin = "2" />
-                //< TextBlock Name = "pubTitle" Text = "Title: " FontSize = "10" Margin = "2" />
-                //< TextBlock Name = "authors" Text = "Authors: " FontSize = "10" Margin = "2" />
-                //< TextBlock Name = "pubYear" Text = "Publication Year: " FontSize = "10" Margin = "2" />
-                //< TextBlock Name = "ranking" Text = "Ranking: " FontSize = "10" Margin = "2" />
-                //< TextBlock Name = "pubType" Text = "Publication Type: " FontSize = "10" Margin = "2" />
-                //< TextBlock Name = "citeAS" Text = "Cite A: " FontSize = "10" Margin = "2" />
-                //< TextBlock Name = "avaDate" Text = "Availability Date: " FontSize = "10" Margin = "2" />
-                //< TextBlock Name = "pubAge" Text = "Age: " FontSize = "10" Margin = "2" />
-            }
         }
 
         public MainWindow()
         {
-            researchers= new ObservableCollection<Researcher>(ResearcherControl.FetchResearchers());
+            resList = ResearcherControl.FetchResearchers();
+            researchers= new ObservableCollection<Researcher>(resList);
             selectedResearcherPublications = new ObservableCollection<Publication>();
             InitializeComponent();
             researcherListView.ItemsSource = researchers;
             PublicationListView.ItemsSource = selectedResearcherPublications;
             
         }
-                private void LevelFilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LevelFilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox comboBox = (ComboBox)sender;
             ComboBoxItem selectedItem = (ComboBoxItem)comboBox.SelectedItem;
@@ -170,8 +157,6 @@ namespace RAP
             string selectedLevel = selectedItem.Content.ToString();
 
             researcherListView.ItemsSource = ResearcherControl.FilterLevel(selectedLevel, researchers);
-            
-
         }
 
         private void SearchBox_KeyDown(object sender, KeyEventArgs e)
@@ -203,6 +188,7 @@ namespace RAP
 
         private void PublicationDateColumnHeader_Click(object sender, RoutedEventArgs e)
         {
+
                 publicaitonList = PublicationsControl.invert_sort(publicaitonList);
 
                 selectedResearcherPublications.Clear();
@@ -225,6 +211,14 @@ namespace RAP
             {
                 MessageBox.Show("No researcher selected");
             }
+        }
+
+        private void Report_Button_Click(object sender, RoutedEventArgs e)
+        {
+            ObservableCollection<Researcher> researchers = new ObservableCollection<Researcher>(ResearcherControl.FetchResearchers());
+            ReportsView reports = new ReportsView(researchers);
+            reports.Show();
+
         }
     }
 }

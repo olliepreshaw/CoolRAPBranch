@@ -67,6 +67,9 @@
     <Compile Include="PerformanceDetailsWindow.xaml.cs">
       <DependentUpon>PerformanceDetailsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ReportsView.xaml.cs">
+      <DependentUpon>ReportsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\PerformaceDetailsView.cs" />
     <Compile Include="View\PublicationView.cs" />
     <Compile Include="View\ResearcherDetailsView.cs" />
@@ -91,6 +94,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="PerformanceDetailsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReportsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

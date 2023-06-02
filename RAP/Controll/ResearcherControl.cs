@@ -14,6 +14,7 @@ using RAP;
 using System.Collections.ObjectModel;
 using System.Xml.Linq;
 using System.Runtime.Versioning;
+using static System.Windows.Forms.AxHost;
 
 namespace KIT206_RAP.Controll
 {
@@ -45,14 +46,20 @@ namespace KIT206_RAP.Controll
         // need positions, not pubs here...
         // positions only for staff, so two researcher details 
         // UC16
-        public static void DisplayResearcherDetails(Researcher Res)
+        public static void DisplayResearcherDetails(Researcher Res, List<Researcher> resList)
         {
-            //get the positions here
-
+            Console.WriteLine("in display Researcher Details");
             if (Res is Staff staff)
             {
                 DBAdapter.GetPositions(staff);
+
+                findSupervisions(resList, staff);
+            }if (Res is Student stu)
+            {
+
+                Console.WriteLine("res is student");
             }
+
             ResearcherDetailsView.DisplayResearcherDetails(Res);
         }
 
@@ -66,26 +73,7 @@ namespace KIT206_RAP.Controll
 
             PerformaceDetailsView.PrintPerformanceView(Res);
         }
-        public static ObservableCollection<Researcher> FilterName(string name, ObservableCollection<Researcher> res)
-        {
-            var filteredCollection = new ObservableCollection<Researcher>();
-            String query = name.ToUpper();
-            if (query != "")
-            {
-                var SelectQuery2 = from entry in res
-                                   where (entry.FirstName.ToUpper().Contains(name)
-                                         || entry.LastName.ToUpper().Contains(name))
-                                   select entry;
 
-                List<Researcher> tempList = SelectQuery2.ToList();
-                
-                tempList.OrderBy(x => x.LastName);
-                filteredCollection = new ObservableCollection<Researcher>(tempList);
-            }
-
-                return filteredCollection;
-
-        }
 
         public static List<Researcher> FilterLevel(string lev, ObservableCollection<Researcher> res)
         {
@@ -107,46 +95,98 @@ namespace KIT206_RAP.Controll
         }
 
 
-        // can't pass an obersevable collection, so just pass the list and update the obs coll
-        // back in the main
-        public static List<Researcher> FilterList(ObservableCollection<Researcher> ResList, string searchText)
-        {
-            List<Researcher> filteredList = new List<Researcher>();
-            string tempFirstName;
-            string tempLastName;
-
-            searchText = searchText.ToLower();
-
-            foreach (Researcher researcher in ResList)
-            {
-                tempFirstName = researcher.FirstName.ToLower();
-                tempLastName = researcher.LastName.ToLower();
-                if (tempFirstName.Contains(searchText) || tempLastName.Contains(searchText))
-                {
-                    filteredList.Add(researcher);
-                }
-            }
-
-            return filteredList;
-        }
-
-        public static void ControllTheDeetails(Researcher researcher)
+           public static void ControllTheDeetails(Researcher researcher)
         {
             Researcher.Q1PercentageCalc(researcher);
 
             if (researcher.Type == Researcher.ResearcherType.Staff)
             {
                 Staff staff = (Staff)researcher;
-                //Staff staff = (Staff)researcherListView.SelectedItem;
-                //ResearcherControl.AverageThreeYear(staff, publications);
                 Staff.AverageThreeYear(staff);
                 Staff.PerfByPub(staff);
                 staff.FundingRecieved=XMLAdapter.LoadFunding(staff);
                 Staff.PerfByFund(staff);
-
             }
         }
 
+        public static string findSupervisions(List<Researcher> researchers, Staff stf)
+        {
+            Console.WriteLine("finding supivistions");
+            int supervisorID = stf.ID; // Replace stf.ID with the staff member's ID
+
+            var matchingStudents = researchers
+                .Where(res => res is Student)
+                .Cast<Student>()
+                .Where(stu => stu.Supervisor == supervisorID);
+            string studentNames = string.Join(", ", matchingStudents.Select(stu => stu.FirstName + " " + stu.LastName));
+            foreach (var student in matchingStudents)
+            {
+                // Access the properties of each matching student
+                Console.WriteLine("Matching student found: " + student.FirstName + " " + student.LastName);
+            }
+            stf.SuperCount = matchingStudents.Count();
+            stf.StudentsSupervised = studentNames;
+
+            Console.WriteLine("the student names are.///");
+            Console.WriteLine(studentNames);
+
+            return studentNames;
+        }
+
+
+        public static List<Staff> FilterReport(string lev, ObservableCollection<Researcher> researchers)
+        {
+            List<Staff> filteredStaff = new List<Staff>();      // Return List
+            Staff staff;                                        // Conversion for Researcher -> Staff
+
+            // Loops Full list
+            foreach (Researcher res in researchers)
+            {
+                // Matches Staff types
+                if (res.Type == Researcher.ResearcherType.Staff)
+                {
+                    staff = (Staff)res;     // Type Conversion
+
+                    // Setup Data. Can be done elsewhere?
+                    staff.Pubs = DBAdapter.GetPubs(staff);
+                    Staff.AverageThreeYear(staff);
+                    Staff.PerfByPub(staff);
+
+                    // Converts string PerfByPub into a double for math comparisions
+                    double.TryParse(staff.PerformanceByPublication.Replace("%", ""), out double result);
+
+                    // Determine which report it should be added to
+                    switch (lev)
+                    {
+                        case "Poor":
+                            if (result <= 70)
+                            {
+                                filteredStaff.Add(staff);
+                            }
+                            break;
+                        case "Below Expectations":
+                            if (result > 70 && result < 110)
+                            {
+                                filteredStaff.Add(staff);
+                            }
+                            break;
+                        case "Meeting Minimum":
+                            if (result >= 110 && result < 200)
+                            {
+                                filteredStaff.Add(staff);
+                            }
+                            break;
+                        case "Star Performers":
+                            if (result >= 200)
+                            {
+                                filteredStaff.Add(staff);
+                            }
+                            break;
+                    }
+                }
+            }
+            return filteredStaff;
+        }
     }
 
 }
