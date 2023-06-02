@@ -177,7 +177,7 @@ namespace RAP
         {
             if (e.Key == Key.Enter)
             {
-                //researcherListView.ItemsSource =  ResearcherControl.FilterList(researchers, SearchBox.Text);
+                researcherListView.ItemsSource =  ResearcherControl.FilterList(researchers, SearchBox.Text);
             }
         }
 
