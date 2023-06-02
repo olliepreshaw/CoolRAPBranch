@@ -147,7 +147,7 @@ namespace RAP
                 pubYear.Text = "Publication Year: " + selectedPublication.AvailabilityDate.Year;
                 ranking.Text = "Ranking: " + selectedPublication.Ranking;
                 pubType.Text = "Publication Type: " + selectedPublication.Type;
-                citeAS.Text = "Cite As: " + Wrap(selectedPublication.CiteAs;
+                citeAS.Text = "Cite As: " + Wrap(selectedPublication.CiteAs, 75);
                 avaDate.Text = "Availability Date: " + selectedPublication.AvailabilityDate.Date.ToShortDateString();
                 pubAge.Text = "Publication Age: " + Math.Round((now - selectedPublication.AvailabilityDate).TotalDays);
              }

@@ -122,7 +122,7 @@ namespace KIT206_RAP.Entites
                 }
             }
             researcher.CommencedWithInstitution = lowest;
-        }*/
+        }
         public static void CalcTenure(Researcher researcher,DateTime CommCurPos)
         {
 
