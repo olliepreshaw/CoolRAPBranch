@@ -68,7 +68,7 @@ namespace RAP
                 commencedInt.Text = "Commenced with institution: " + selectedResearcher.CommencedWithInstitution.ToString("d");
                 commencedCurr.Text = "Commenced current job: " + selectedResearcher.CommenceCurrentPosition.ToString("d");
 
-                prevPos.Text = "Previous positions: " + selectedResearcher;
+                //prevPos.Text = "Previous positions: " + selectedResearcher;
                 tenure.Text = "Tenure: ";
 
                 publi.Text = "Publications: " + selectedResearcher.Pubs.Count;
@@ -84,7 +84,7 @@ namespace RAP
                     threeYearAvg.Text = "3-year-average: " + staff.ThreeYearAverage;
                     performanceFund.Text = "Performance by Funding: " + "$" + (Math.Round(staff.FundingRecieved / ((DateTime.Now - staff.CommencedWithInstitution).TotalDays / 365), 1)).ToString();
                     performancePub.Text = "Performance by Publication: " + String.Format("{0:0.0}", Math.Round(staff.ThreeYearAverage / staff.ExpectedNoPubs * 100, 1) + "%");
-                    supervisions.Text = "Supervisions: " + staff.Supervisions.Count; 
+                    //supervisions.Text = "Supervisions: " + staff.Supervisions.Count; 
                 }
 
                 ImageData = new BitmapImage(new Uri(selectedResearcher.PhotoURL));
@@ -125,7 +125,7 @@ namespace RAP
                 DateTime now = DateTime.Now;
 
                 
-                DOI.Text = "Title : " + selectedPublication.DOI;
+                DOI.Text = "DOI : " + selectedPublication.DOI;
                 pubTitle.Text = "Publication Title: " + selectedPublication.Title;
                 authors.Text = "Authors: " + selectedPublication.Authors;
                 //pubYear.Text = "Publication Year: " + selectedPublication.year;
@@ -134,7 +134,7 @@ namespace RAP
                 citeAS.Text = "Cite As: " + selectedPublication.CiteAs;
                 avaDate.Text = "Availability Date: " + selectedPublication.AvailabilityDate;
 
-                pubAge.Text = "Publication Age: " + selectedPublication.Age;
+                //pubAge.Text = "Publication Age: " + selectedPublication.Age;
              }
 
         }
@@ -163,7 +163,7 @@ namespace RAP
         {
             if (e.Key == Key.Enter)
             {
-                researcherListView.ItemsSource =  ResearcherControl.FilterList(researchers, SearchBox.Text);
+                //researcherListView.ItemsSource =  ResearcherControl.FilterList(researchers, SearchBox.Text);
             }
         }
 
