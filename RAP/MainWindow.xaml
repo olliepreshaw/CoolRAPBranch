@@ -17,7 +17,7 @@
             <ColumnDefinition Width="300*" MinWidth="270"/>
             <ColumnDefinition Width="275*"/>
         </Grid.ColumnDefinitions>
-        <ListView Name="researcherListView" Margin="10,8,0,10" SelectionChanged= "researcherListView_SelectionChanged" Grid.Row="1" >
+        <ListView Name="researcherListView" Margin="10,8,0,39" SelectionChanged= "researcherListView_SelectionChanged" Grid.Row="1" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}"/>
@@ -120,5 +120,6 @@ publication became available; this can be negative if the availability date is i
 
         <TextBox x:Name="SearchBox" Margin="15,5,5,0" KeyDown="SearchBox_KeyDown" Height="22" VerticalAlignment="Top" />
         <Image Name="ResercherPhoto" Grid.Column="1" Margin="176,23,15,311" Grid.RowSpan="2" HorizontalAlignment="Right" MinWidth="100" MaxWidth="200" MinHeight="100" MaxHeight="300" VerticalAlignment="Top"/>
+        <Button Content="Generate Reports" HorizontalAlignment="Center" Margin="0,0,0,12" Grid.Row="1" Width="100" Click="Report_Button_Click" Height="20" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

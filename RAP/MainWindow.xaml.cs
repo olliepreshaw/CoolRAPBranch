@@ -79,7 +79,7 @@ namespace RAP
                     threeYearAvg.Text = "3-year-average: " + staff.ThreeYearAverage;
                     performanceFund.Text = "Performance by Funding: " + "$" + (Math.Round(staff.FundingRecieved / ((DateTime.Now - staff.CommencedWithInstitution).TotalDays / 365), 1)).ToString();
                     performancePub.Text = "Performance by Publication: " + String.Format("{0:0.0}", Math.Round(staff.ThreeYearAverage / staff.ExpectedNoPubs * 100, 1) + "%");
-                    supervisions.Text = "Supervisions: " + staff.Supervisions; 
+                    supervisions.Text = "Supervisions: " + staff.Supervisions.Count; 
                 }
                 // image
                 //ImageData = new BitmapImage(new Uri(selectedResearcher.PhotoURL));
@@ -162,7 +162,7 @@ namespace RAP
             PublicationListView.ItemsSource = selectedResearcherPublications;
             
         }
-                private void LevelFilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LevelFilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox comboBox = (ComboBox)sender;
             ComboBoxItem selectedItem = (ComboBoxItem)comboBox.SelectedItem;
@@ -225,6 +225,14 @@ namespace RAP
             {
                 MessageBox.Show("No researcher selected");
             }
+        }
+
+        private void Report_Button_Click(object sender, RoutedEventArgs e)
+        {
+            ObservableCollection<Researcher> researchers = new ObservableCollection<Researcher>(ResearcherControl.FetchResearchers());
+            ReportsView reports = new ReportsView(researchers);
+            reports.Show();
+
         }
     }
 }
