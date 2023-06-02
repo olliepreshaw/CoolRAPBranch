@@ -145,7 +145,7 @@ namespace KIT206_RAP.DataBase
             */
         }
         
-        //gets supervisions
+        //gets supervisions delete this
         public static void GetSupervisions(Staff Stf)
         {
             MySqlDataReader rdr = null;
@@ -179,7 +179,7 @@ namespace KIT206_RAP.DataBase
                     var lev = "Student";
 
                     Student res = new Student(id, type, firstName, lastName, title, unit, campus, email, photo, superID, degree,  utas_start, cur_start, lev);
-                    Stf.Supervisions.Add(res);
+                    //Stf.Supervisions.Add(res);
                 }
             }
             finally
