@@ -23,18 +23,38 @@ namespace RAP
     public partial class ReportsView : Window
     {
         private ObservableCollection<Researcher> staff;
+        private List<List<Staff>> ReportsList = new List<List<Staff>>();
         public ReportsView(ObservableCollection<Researcher> staff)
         {
+            ReportsList = ResearcherControl.SortReport(staff);
             InitializeComponent();
             this.staff = staff;
-            StaffListView.ItemsSource = staff;
+            //StaffListView.ItemsSource = staff;
         }
         private void ReportSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+
             ComboBox comboBox = (ComboBox)sender;
             ComboBoxItem selectedItem = (ComboBoxItem)comboBox.SelectedItem;
             string selectedLevel = selectedItem.Content.ToString();
-            StaffListView.ItemsSource = ResearcherControl.FilterReport(selectedLevel, staff);
+            StaffListView.ItemsSource = ResearcherControl.GenReport(selectedLevel, ReportsList);
+        }
+        private void Button_Copy_Email_Click(object sender, RoutedEventArgs e)
+        {
+            string copiedEmail="";
+            if (StaffListView.ItemsSource!=null)
+            {
+                foreach (Researcher researcher in StaffListView.ItemsSource)
+                {
+                    copiedEmail += researcher.Email += ";";
+                }
+                Clipboard.SetText(copiedEmail);
+                MessageBox.Show("Emails(s) copied to clipboard.");
+            }
+            else
+            {
+                MessageBox.Show("No emails to copy");
+            }
         }
     }
     
