@@ -56,6 +56,8 @@ namespace KIT206_RAP.Entites
             PositionLevel = (Level)Enum.Parse(typeof(Level), lev);
             Console.WriteLine(firstName + "..." + PositionLevel);
             DeriveJobTitle(PositionLevel);
+            CalcTenure(this, CommencedWithInstitution);
+
         }
         public void DeriveJobTitle(Level level)
         {
@@ -95,7 +97,10 @@ namespace KIT206_RAP.Entites
             }
         }
 
+
+
         public static void CalcPositionInfo(Researcher researcher, List<Position> positions)
+
         {
             Console.WriteLine("\t\t\t\tthello in the funciton");
             foreach (Position positiona in positions)
@@ -117,14 +122,14 @@ namespace KIT206_RAP.Entites
                 }
             }
             researcher.CommencedWithInstitution = lowest;
-        }
+        }*/
         public static void CalcTenure(Researcher researcher,DateTime CommCurPos)
         {
 
             TimeSpan difference = DateTime.Now - CommCurPos;
             double years = difference.TotalDays / 365.25;
 
-            researcher.Tenure = years;
+            researcher.Tenure = Math.Round(years,2);
         }
 
         public static DateTime CalcComencedCurrentPos(Staff Sta)
