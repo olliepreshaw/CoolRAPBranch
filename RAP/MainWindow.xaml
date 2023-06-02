@@ -20,15 +20,28 @@
         <ListView Name="researcherListView" Margin="10,8,0,10" SelectionChanged= "researcherListView_SelectionChanged" Grid.Row="1" >
             <ListView.View>
                 <GridView>
+                    <GridViewColumn Header="Last Name">
+                        <GridViewColumn.DisplayMemberBinding>
+                            <MultiBinding StringFormat="{}{0},">
+                                <Binding Path="LastName" />
+                            </MultiBinding>
+                        </GridViewColumn.DisplayMemberBinding>
+                    </GridViewColumn>
                     <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}"/>
-                    <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}"/>
-                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}"/>
+                    <GridViewColumn Header="Title">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title, StringFormat='({0})'}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Header="Level" DisplayMemberBinding="{Binding PositionLevel}"/>
                 </GridView>
             </ListView.View>
         </ListView>
         <!-- filter by level combo box-->
         <Image Source="{Binding ImageData}" Margin="20,46,20,116" Grid.Row="1" />
+
         <!-- Lable for Box 
         <TextBox Grid.Row="0" x:Name="SearchBox" TextChanged="SearchBox_KeyUp" Margin="10,19,0,390" />-->
         <!-- combo box to filter list by level, this should be linked to the enum, however could not work out how to 

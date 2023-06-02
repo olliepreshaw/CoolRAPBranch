@@ -79,7 +79,7 @@ namespace RAP
                     threeYearAvg.Text = "3-year-average: " + staff.ThreeYearAverage;
                     performanceFund.Text = "Performance by Funding: " + "$" + (Math.Round(staff.FundingRecieved / ((DateTime.Now - staff.CommencedWithInstitution).TotalDays / 365), 1)).ToString();
                     performancePub.Text = "Performance by Publication: " + String.Format("{0:0.0}", Math.Round(staff.ThreeYearAverage / staff.ExpectedNoPubs * 100, 1) + "%");
-                    supervisions.Text = "Supervisions: " + staff.Supervisions; 
+                    supervisions.Text = "Supervisions: " + staff.Supervisions.Count; 
                 }
                 // image
                 //ImageData = new BitmapImage(new Uri(selectedResearcher.PhotoURL));
