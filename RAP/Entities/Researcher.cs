@@ -58,6 +58,8 @@ namespace KIT206_RAP.Entites
             PositionLevel = (Level)Enum.Parse(typeof(Level), lev);
             Console.WriteLine(firstName + "..." + PositionLevel);
             DeriveJobTitle(PositionLevel);
+            CalcTenure(this, CommencedWithInstitution);
+
         }
         public void DeriveJobTitle(Level level)
         {
@@ -105,7 +107,7 @@ namespace KIT206_RAP.Entites
         // overload constructor to deal with the position data
         // not sure how this will be defined, do they have poitions from other institutions in this list?
         // if so will have to check that the name matches the institution we are developing for presumably UTAS
-        public static void CalcPositionInfo(Researcher researcher, List<Position> positions)
+        /*public static void CalcPositionInfo(Researcher researcher, List<Position> positions)
         {
             Console.WriteLine("\t\t\t\tthello in the funciton");
             foreach (Position positiona in positions)
@@ -135,7 +137,7 @@ namespace KIT206_RAP.Entites
                 }
             }
             researcher.CommencedWithInstitution = lowest;
-        }
+        }*/
         public static void CalcTenure(Researcher researcher,DateTime CommCurPos)
         {
             //Tenure is the time in (fractional) years since the researcher commenced with the institution.
@@ -144,7 +146,7 @@ namespace KIT206_RAP.Entites
             TimeSpan difference = DateTime.Now - CommCurPos;
             double years = difference.TotalDays / 365.25;
 
-            researcher.Tenure = years;
+            researcher.Tenure = Math.Round(years,2);
         }
 
         // this will just have to take the staff member (as stu do not have positions) and loop through looking for the pos. with end date == null

@@ -68,27 +68,33 @@ namespace RAP
                 commencedInt.Text = "Commenced with institution: " + selectedResearcher.CommencedWithInstitution.ToString("d");
                 commencedCurr.Text = "Commenced current job: " + selectedResearcher.CommenceCurrentPosition.ToString("d");
 
-                prevPos.Text = "Previous positions: " + selectedResearcher;
-                tenure.Text = "Tenure: ";
+                // Convert this to a float of years. To do in Staff.cs
+                tenure.Text = "Tenure: "+selectedResearcher.Tenure;
 
                 publi.Text = "Publications: " + selectedResearcher.Pubs.Count;
                 if (selectedResearcher is Student student)
                 {
                     degree.Text = "Degree: " + student.Degree;
                     supervisions.Text = "Supervisions: N/A";
-                    supervisor.Text = "Supervisor: " + student.Supervisor;
+                    supervisor.Text = "Supervisor: " + student.SupervisorName;
                 }
                 else if (selectedResearcher is Staff staff)
                 {
+                    degree.Text = "Degree: N/A";
                     supervisor.Text = "Supervisor: N/A";
-                    threeYearAvg.Text = "3-year-average: " + staff.ThreeYearAverage;
-                    performanceFund.Text = "Performance by Funding: " + "$" + (Math.Round(staff.FundingRecieved / ((DateTime.Now - staff.CommencedWithInstitution).TotalDays / 365), 1)).ToString();
-                    performancePub.Text = "Performance by Publication: " + String.Format("{0:0.0}", Math.Round(staff.ThreeYearAverage / staff.ExpectedNoPubs * 100, 1) + "%");
-                    supervisions.Text = "Supervisions: " + staff.Supervisions.Count; 
+                    supervisions.Text = "Supervisions: " + staff.SuperCount;
+                    //prevPos.Text = "Previous positions: " + selectedResearcher;
                 }
 
-                ImageData = new BitmapImage(new Uri(selectedResearcher.PhotoURL));
+                //ImageData = new BitmapImage(new Uri(selectedResearcher.PhotoURL));
+                var photo = new Image();
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(selectedResearcher.PhotoURL);
+                bitmap.EndInit();
+                ImageSource imageSource = bitmap;
 
+                ResercherPhoto.Source = imageSource;
 
                 Console.WriteLine("image URL " + selectedResearcher.PhotoURL);
 
@@ -128,13 +134,13 @@ namespace RAP
                 DOI.Text = "Title : " + selectedPublication.DOI;
                 pubTitle.Text = "Publication Title: " + selectedPublication.Title;
                 authors.Text = "Authors: " + selectedPublication.Authors;
-                //pubYear.Text = "Publication Year: " + selectedPublication.year;
+                pubYear.Text = "Publication Year: " + selectedPublication.AvailabilityDate.Year;
                 ranking.Text = "Ranking: " + selectedPublication.Ranking;
                 pubType.Text = "Publication Type: " + selectedPublication.Type;
                 citeAS.Text = "Cite As: " + selectedPublication.CiteAs;
                 avaDate.Text = "Availability Date: " + selectedPublication.AvailabilityDate;
 
-                pubAge.Text = "Publication Age: " + selectedPublication.Age;
+                //pubAge.Text = "Publication Age: " + selectedPublication.Age;
              }
 
         }
