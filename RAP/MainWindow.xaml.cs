@@ -67,9 +67,9 @@ namespace RAP
                 
                 commencedInt.Text = "Commenced with institution: " + selectedResearcher.CommencedWithInstitution.ToString("d");
                 commencedCurr.Text = "Commenced current job: " + selectedResearcher.CommenceCurrentPosition.ToString("d");
-
                 // Convert this to a float of years. To do in Staff.cs
                 tenure.Text = "Tenure: "+selectedResearcher.Tenure;
+
 
                 publi.Text = "Publications: " + selectedResearcher.Pubs.Count;
                 if (selectedResearcher is Student student)
@@ -83,7 +83,6 @@ namespace RAP
                     degree.Text = "Degree: N/A";
                     supervisor.Text = "Supervisor: N/A";
                     supervisions.Text = "Supervisions: " + staff.SuperCount;
-                    //prevPos.Text = "Previous positions: " + selectedResearcher;
                 }
 
                 //ImageData = new BitmapImage(new Uri(selectedResearcher.PhotoURL));
@@ -123,6 +122,16 @@ namespace RAP
             }
         }
 
+        private static string Wrap(string v, int size)
+        {
+            v = v.TrimStart();
+            if (v.Length <= size) return v;
+            var nextspace = v.LastIndexOf(' ', size);
+            if (-1 == nextspace) nextspace = Math.Min(v.Length, size);
+            return v.Substring(0, nextspace) + ((nextspace >= v.Length) ?
+            "" : "\n" + Wrap(v.Substring(nextspace), size));
+        }
+
         private void PublicationListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (PublicationListView.SelectedItem != null)
@@ -130,19 +139,18 @@ namespace RAP
                 Publication selectedPublication = (Publication)PublicationListView.SelectedItem;
                 DateTime now = DateTime.Now;
 
-                
-                DOI.Text = "Title : " + selectedPublication.DOI;
-                pubTitle.Text = "Publication Title: " + selectedPublication.Title;
+
+
+                DOI.Text = "DOI : " + selectedPublication.DOI;
+                pubTitle.Text = "Publication Title: " + Wrap(selectedPublication.Title, 75);
                 authors.Text = "Authors: " + selectedPublication.Authors;
                 pubYear.Text = "Publication Year: " + selectedPublication.AvailabilityDate.Year;
                 ranking.Text = "Ranking: " + selectedPublication.Ranking;
                 pubType.Text = "Publication Type: " + selectedPublication.Type;
-                citeAS.Text = "Cite As: " + selectedPublication.CiteAs;
-                avaDate.Text = "Availability Date: " + selectedPublication.AvailabilityDate;
-
-                //pubAge.Text = "Publication Age: " + selectedPublication.Age;
+                citeAS.Text = "Cite As: " + Wrap(selectedPublication.CiteAs;
+                avaDate.Text = "Availability Date: " + selectedPublication.AvailabilityDate.Date.ToShortDateString();
+                pubAge.Text = "Publication Age: " + Math.Round((now - selectedPublication.AvailabilityDate).TotalDays);
              }
-
         }
 
         public MainWindow()
@@ -169,7 +177,7 @@ namespace RAP
         {
             if (e.Key == Key.Enter)
             {
-                researcherListView.ItemsSource =  ResearcherControl.FilterList(researchers, SearchBox.Text);
+                //researcherListView.ItemsSource =  ResearcherControl.FilterList(researchers, SearchBox.Text);
             }
         }
 

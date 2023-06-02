@@ -8,20 +8,16 @@ namespace KIT206_RAP.Entites
 {
     public class Publication
     {
-        // Properties
-        //public bool Q1Ranked { get; set; }
-        //public DateTime PublicationYear { get; set; }
+
         public string Title { get; set; }
         public string DOI { get; set; }
-        // is authors an actual list of researcher objects? or just a list of strings?
-        //public List<Researcher> Authors { get; set; }
+
         public string Authors { get; set; }
         public string CiteAs { get; set; }
         public RankingType Ranking { get; set; }
         public DateTime AvailabilityDate { get; set; }
-        //public int PageCount { get; set; }
         public PublicationType Type { get; set; }
-        //public RankingType Ranking { get; set; }
+
 
         // Constructor
         public Publication( string title, string doi, string authors, string citeAs, DateTime availabilityDate, string type, string ranking)
@@ -51,11 +47,7 @@ namespace KIT206_RAP.Entites
             }
 
         }
-        // Method to count cumulative publications
-        //public int cumulativePubs()
-        //{
-        //    return Authors.Sum(author => author.Publications.Count);
-        //}
+ 
     }
     
 
@@ -65,7 +57,6 @@ namespace KIT206_RAP.Entites
         Journal
     }
 
-    // can not find in db
     public enum RankingType
     {
         Q1,

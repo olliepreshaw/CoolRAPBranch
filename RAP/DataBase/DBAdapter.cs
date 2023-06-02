@@ -245,14 +245,8 @@ namespace KIT206_RAP.DataBase
                         Staff sta = new Staff(id, type, firstName, lastName, title, unit, campus, email, photo, lev, utas_start, cur_start);
                         //GetPubs(sta);
                         Researchers.Add(sta);
-                        // this could be replaced with nested for loops to check the list for supervisors == id
-                        // probs faster to query DB?
-                        //GetSupervisions(sta);
-                    }
 
-                    //Researcher res = new Researcher(id, type, firstName, lastName, title, unit, campus, email, photo, utas_start, cur_start);
-                    //Console.WriteLine("researcher added = " + res.LastName);
-                    //Researchers.Add(res);
+                    }
                 }
             }
             finally
@@ -480,16 +474,9 @@ namespace KIT206_RAP.DataBase
             }
             return null;
         }
-
-        // get positions only staff have positions
-        // parameters a staff, so as we can add the positions to their List<positions>
         
         public static void GetPositions(Staff Sta)
         {
-            // get * from positions where if = Sta.id
-            // get the vars,
-            // handle nulls for stil active position
-            // add to the list
 
             MySqlDataReader rdr = null;
             DBAdapter demo = new DBAdapter();

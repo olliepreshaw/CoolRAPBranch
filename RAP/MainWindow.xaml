@@ -42,10 +42,6 @@
         <!-- filter by level combo box-->
         <Image Source="{Binding ImageData}" Margin="20,46,20,116" Grid.Row="1" />
 
-        <!-- Lable for Box 
-        <TextBox Grid.Row="0" x:Name="SearchBox" TextChanged="SearchBox_KeyUp" Margin="10,19,0,390" />-->
-        <!-- combo box to filter list by level, this should be linked to the enum, however could not work out how to 
-        "improt" the package -->
         <ComboBox Name="LevelFilterComboBox" SelectionChanged="LevelFilterComboBox_SelectionChanged" Margin="75,44,10,0" VerticalAlignment="Top" Height="22">
             <ComboBoxItem Content="Student" />
             <ComboBoxItem Content="A" />
@@ -109,10 +105,6 @@
             </ListView.View>
         </ListView>
 
-        <!-- DOI; Title; Authors; Publication year; Ranking (one of 'Q1', 'Q2', etc.), Type (one of ‘Conference’,
-‘Journal’ or ‘Other’); Cite as (this is a single string obtained from the Employment and Researcher Database); Availability date (the
-date when the publication was first available, which may differ from the publication year); Age (the days elapsed since the
-publication became available; this can be negative if the availability date is in the future)-->
         <ListView Name="pubsDetailsView" Grid.Column="2" VerticalAlignment="Top" Height="424" Grid.RowSpan="2">
             <StackPanel>
                 <TextBlock Name="DOI" Text="DOI: " FontSize="10" Margin="2"/>

@@ -5,19 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static KIT206_RAP.Entites.Staff;
-/*
-3-year Average is the total number of publications in the previous three whole calendar years, divided by three. SWC 27
-Performance by Publication is the average number of publications per year since commencement. SWC 27
-Performance by Funding Received is the average amount of funding per year since commencement. SWC 27
-Supervisions is the number of students the staff member is currently or has previously supervised. 
-*/
+
 namespace KIT206_RAP.Entites
 {
     public class Staff : Researcher
     {
         
-        //public double ExpectedNoPubs { get; set; }
-        //public JobTitle Job_Title{ get; set; }
         public int FundingRecieved { get; set; }
         public string PerformanceByFunding { get; set; }
         public double ThreeYearAverage { get; set; }

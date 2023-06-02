@@ -13,21 +13,14 @@ namespace RAP.Controll
     {
 
         public static List<Publication> invert_sort(List<Publication> pubList)
-        {   // year is being sorted correctly, however the alphabetical sorting for publications with the
-            // same year is not funcitonal
-            /*
-            List<Publication> orderedList = pubList.OrderBy(item => item.AvailabilityDate.Year)
-                              .ThenBy(item => item.Title, StringComparer.OrdinalIgnoreCase)
-                              .ToList();
-            */
+        {   
             pubList.Reverse();
             return pubList;
         }
  
 
         public static List<Publication> sort_list(List<Publication> pubList)
-        {   // year is being sorted correctly, however the alphabetical sorting for publications with the
-            // same year is not funcitonal
+        {   
             List<Publication> orderedList = pubList.OrderByDescending(item => item.AvailabilityDate.Year)
                               .ThenBy(item => item.Title, StringComparer.OrdinalIgnoreCase)
                               .ToList();
@@ -44,10 +37,7 @@ namespace RAP.Controll
             {
             List <Publication> pubs = new List<Publication>();
             pubs = DBAdapter.GetPubs(res);
-            // sort by year, most recent first
-            // if same year, alphabetically
-            //Test
-            //Tests.Tests.add_test_publication(pubs);
+            
 
             pubs = sort_list(pubs);
 
