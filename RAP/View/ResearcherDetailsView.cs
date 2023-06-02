@@ -63,7 +63,7 @@ namespace KIT206_RAP.View
                 // display supervisions, this loop should be moved?
                 Console.WriteLine("LINQ Statements....");
                 Console.WriteLine("supervisions are");
-                staff.Supervisions.ForEach(res => Console.WriteLine($"Supervises {res.FirstName} {res.LastName}"));
+                //staff.Supervisions.ForEach(res => Console.WriteLine($"Supervises {res.FirstName} {res.LastName}"));
                 Console.WriteLine("Stff memb positions are.... ");
                 staff.Positions.ForEach(pos => Console.WriteLine($"{pos.StartDate} {pos.EndDate}"));
 

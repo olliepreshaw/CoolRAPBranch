@@ -20,14 +20,7 @@ namespace KIT206_RAP.Entites
         {
             Supervisor = supervisorID;
             Degree = degree;
-            SupervisorName = getSupervisName(supervisorID);
         }
 
-        public static string getSupervisName(int supervisorID)
-        {
-
-            Staff supervisor = DBAdapter.GetStaff(supervisorID);
-            return supervisor.FirstName + " " + supervisor.LastName;
-        }
     }
 }
