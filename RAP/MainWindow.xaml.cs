@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using RAP.Controll;
 using RAP.Entities;
+using System.Linq.Expressions;
 
 
 
@@ -45,7 +46,9 @@ namespace RAP
                 ResearcherControl.DisplayResearcherDetails(selectedResearcher, resList);
                 selectedResearcher.Pubs.Clear();
                 publicaitonList = PublicationsControl.FetchPublications(selectedResearcher);
-                                selectedResearcherPublications.Clear();
+
+                selectedResearcherPublications.Clear();
+
                 foreach (var publication in publicaitonList)
                 {
                     selectedResearcherPublications.Add(publication);
@@ -63,28 +66,29 @@ namespace RAP
                 job.Text = "Job: " + selectedResearcher.Job_Title;
                 
                 commencedInt.Text = "Commenced with institution: " + selectedResearcher.CommencedWithInstitution.ToString("d");
-                
                 commencedCurr.Text = "Commenced current job: " + selectedResearcher.CommenceCurrentPosition.ToString("d");
+
                 prevPos.Text = "Previous positions: " + selectedResearcher;
                 tenure.Text = "Tenure: ";
+
                 publi.Text = "Publications: " + selectedResearcher.Pubs.Count;
-                //implement this chris or ill cry
-                //threeYearAvg.Text = "3-year-average: " + selectedResearcher;
-                //cummulative count of sups pls, can't seem to access supervisions?
-                //supervisions.Text = "Job: " + selectedResearcher.;
-                //performance.Text = "Performance: " + selectedResearcher.performancebypublication;
                 if (selectedResearcher is Student student)
                 {
-                    supervisor.Text = "Supervisor: " + student.Supervisor;
                     degree.Text = "Degree: " + student.Degree;
+                    supervisions.Text = "Supervisions: N/A";
+                    supervisor.Text = "Supervisor: " + student.Supervisor;
                 }
                 else if (selectedResearcher is Staff staff)
                 {
+                    supervisor.Text = "Supervisor: N/A";
                     threeYearAvg.Text = "3-year-average: " + staff.ThreeYearAverage;
                     performanceFund.Text = "Performance by Funding: " + "$" + (Math.Round(staff.FundingRecieved / ((DateTime.Now - staff.CommencedWithInstitution).TotalDays / 365), 1)).ToString();
-                    performancePub.Text = "Performance by Funding: " + String.Format("{0:0.0}", Math.Round(staff.ThreeYearAverage / staff.ExpectedNoPubs * 100, 1) + "%");
+                    performancePub.Text = "Performance by Publication: " + String.Format("{0:0.0}", Math.Round(staff.ThreeYearAverage / staff.ExpectedNoPubs * 100, 1) + "%");
+                    supervisions.Text = "Supervisions: " + staff.Supervisions.Count; 
                 }
+
                 ImageData = new BitmapImage(new Uri(selectedResearcher.PhotoURL));
+
 
                 Console.WriteLine("image URL " + selectedResearcher.PhotoURL);
 
@@ -94,17 +98,23 @@ namespace RAP
         private void tempButton_Click(object sender, RoutedEventArgs e)
         {
             Researcher selectedResearcher = (Researcher)researcherListView.SelectedItem;
-            PerformanceDetailsWindow PdetailsView = new PerformanceDetailsWindow();
+            if (selectedResearcher != null)
+            {
+                PerformanceDetailsWindow PdetailsView = new PerformanceDetailsWindow();
+                ResearcherControl.ControllTheDeetails(selectedResearcher);
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.UriSource = new Uri(selectedResearcher.PhotoURL);
+                image.EndInit();
+                PdetailsView.profilePic.Source = image;
 
-            ResearcherControl.ControllTheDeetails(selectedResearcher);
-            BitmapImage image = new BitmapImage();
-            image.BeginInit();
-            image.UriSource = new Uri(selectedResearcher.PhotoURL);
-            image.EndInit();
-            PdetailsView.profilePic.Source = image;
-
-            PdetailsView.DataContext = selectedResearcher;
-            PdetailsView.Show();
+                PdetailsView.DataContext = selectedResearcher;
+                PdetailsView.Show();
+            }
+            else
+            {
+                MessageBox.Show("No researcher selected");
+            }
         }
 
         private void PublicationListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -112,8 +122,9 @@ namespace RAP
             if (PublicationListView.SelectedItem != null)
             {
                 Publication selectedPublication = (Publication)PublicationListView.SelectedItem;
+                DateTime now = DateTime.Now;
 
-
+                
                 DOI.Text = "Title : " + selectedPublication.DOI;
                 pubTitle.Text = "Publication Title: " + selectedPublication.Title;
                 authors.Text = "Authors: " + selectedPublication.Authors;
@@ -122,8 +133,10 @@ namespace RAP
                 pubType.Text = "Publication Type: " + selectedPublication.Type;
                 citeAS.Text = "Cite As: " + selectedPublication.CiteAs;
                 avaDate.Text = "Availability Date: " + selectedPublication.AvailabilityDate;
+
                 pubAge.Text = "Publication Age: " + selectedPublication.Age;
-                }
+             }
+
         }
 
         public MainWindow()
@@ -136,7 +149,7 @@ namespace RAP
             PublicationListView.ItemsSource = selectedResearcherPublications;
             
         }
-                private void LevelFilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LevelFilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox comboBox = (ComboBox)sender;
             ComboBoxItem selectedItem = (ComboBoxItem)comboBox.SelectedItem;
@@ -150,7 +163,7 @@ namespace RAP
         {
             if (e.Key == Key.Enter)
             {
-                researcherListView.ItemsSource =  ResearcherControl.FilterName(SearchBox.Text, researchers);
+                researcherListView.ItemsSource =  ResearcherControl.FilterList(researchers, SearchBox.Text);
             }
         }
 
@@ -183,6 +196,29 @@ namespace RAP
                 {
                     selectedResearcherPublications.Add(publication);
                 }
+        }
+
+        private void Button_Copy_Email_Click(object sender, RoutedEventArgs e)
+        {
+            string copiedEmail;
+            Researcher selectedResearcher = (Researcher)researcherListView.SelectedItem;
+            if(selectedResearcher != null){
+                copiedEmail = selectedResearcher.Email;
+                Clipboard.SetText(copiedEmail);
+                MessageBox.Show("Text copied to clipboard." + copiedEmail);
+            }
+            else
+            {
+                MessageBox.Show("No researcher selected");
+            }
+        }
+
+        private void Report_Button_Click(object sender, RoutedEventArgs e)
+        {
+            ObservableCollection<Researcher> researchers = new ObservableCollection<Researcher>(ResearcherControl.FetchResearchers());
+            ReportsView reports = new ReportsView(researchers);
+            reports.Show();
+
         }
     }
 }

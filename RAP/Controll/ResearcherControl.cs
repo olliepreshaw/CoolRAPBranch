@@ -13,6 +13,8 @@ using RAP.Entities;
 using RAP;
 using System.Collections.ObjectModel;
 using System.Xml.Linq;
+using System.Runtime.Versioning;
+using static System.Windows.Forms.AxHost;
 
 namespace KIT206_RAP.Controll
 {
@@ -57,6 +59,7 @@ namespace KIT206_RAP.Controll
 
                 Console.WriteLine("res is student");
             }
+
             ResearcherDetailsView.DisplayResearcherDetails(Res);
         }
 
@@ -70,26 +73,7 @@ namespace KIT206_RAP.Controll
 
             PerformaceDetailsView.PrintPerformanceView(Res);
         }
-        public static ObservableCollection<Researcher> FilterName(string name, ObservableCollection<Researcher> res)
-        {
-            var filteredCollection = new ObservableCollection<Researcher>();
-            String query = name.ToUpper();
-            if (query != "")
-            {
-                var SelectQuery2 = from entry in res
-                                   where (entry.FirstName.ToUpper().Contains(name)
-                                         || entry.LastName.ToUpper().Contains(name))
-                                   select entry;
 
-                List<Researcher> tempList = SelectQuery2.ToList();
-                
-                tempList.OrderBy(x => x.LastName);
-                filteredCollection = new ObservableCollection<Researcher>(tempList);
-            }
-
-                return filteredCollection;
-
-        }
 
         public static List<Researcher> FilterLevel(string lev, ObservableCollection<Researcher> res)
         {
@@ -109,6 +93,7 @@ namespace KIT206_RAP.Controll
                 return filteredResearchers.OrderBy(x => x.LastName).ToList();
             }
         }
+
 
            public static void ControllTheDeetails(Researcher researcher)
         {
@@ -149,6 +134,59 @@ namespace KIT206_RAP.Controll
         }
 
 
+        public static List<Staff> FilterReport(string lev, ObservableCollection<Researcher> researchers)
+        {
+            List<Staff> filteredStaff = new List<Staff>();      // Return List
+            Staff staff;                                        // Conversion for Researcher -> Staff
+
+            // Loops Full list
+            foreach (Researcher res in researchers)
+            {
+                // Matches Staff types
+                if (res.Type == Researcher.ResearcherType.Staff)
+                {
+                    staff = (Staff)res;     // Type Conversion
+
+                    // Setup Data. Can be done elsewhere?
+                    staff.Pubs = DBAdapter.GetPubs(staff);
+                    Staff.AverageThreeYear(staff);
+                    Staff.PerfByPub(staff);
+
+                    // Converts string PerfByPub into a double for math comparisions
+                    double.TryParse(staff.PerformanceByPublication.Replace("%", ""), out double result);
+
+                    // Determine which report it should be added to
+                    switch (lev)
+                    {
+                        case "Poor":
+                            if (result <= 70)
+                            {
+                                filteredStaff.Add(staff);
+                            }
+                            break;
+                        case "Below Expectations":
+                            if (result > 70 && result < 110)
+                            {
+                                filteredStaff.Add(staff);
+                            }
+                            break;
+                        case "Meeting Minimum":
+                            if (result >= 110 && result < 200)
+                            {
+                                filteredStaff.Add(staff);
+                            }
+                            break;
+                        case "Star Performers":
+                            if (result >= 200)
+                            {
+                                filteredStaff.Add(staff);
+                            }
+                            break;
+                    }
+                }
+            }
+            return filteredStaff;
+        }
     }
 
 }

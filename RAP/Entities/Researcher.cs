@@ -58,7 +58,7 @@ namespace KIT206_RAP.Entites
             PositionLevel = (Level)Enum.Parse(typeof(Level), lev);
             Console.WriteLine(firstName + "..." + PositionLevel);
             DeriveJobTitle(PositionLevel);
-            }
+        }
         public void DeriveJobTitle(Level level)
         {
             switch (level)

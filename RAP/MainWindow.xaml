@@ -9,15 +9,15 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="27*"/>
-            <RowDefinition Height="35*"/>
+            <RowDefinition Height="73"/>
+            <RowDefinition Height="361*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="240*"/>
-            <ColumnDefinition Width="293*"/>
-            <ColumnDefinition Width="267*"/>
+            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="300*" MinWidth="270"/>
+            <ColumnDefinition Width="275*"/>
         </Grid.ColumnDefinitions>
-        <ListView Name="researcherListView" Margin="10,79,0,10" SelectionChanged= "researcherListView_SelectionChanged" Grid.RowSpan="2">
+        <ListView Name="researcherListView" Margin="10,8,0,39" SelectionChanged= "researcherListView_SelectionChanged" Grid.Row="1" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}"/>
@@ -28,12 +28,12 @@
             </ListView.View>
         </ListView>
         <!-- filter by level combo box-->
-        <Image Width="200" Height="200" Source="{Binding ImageData}" Margin="20,117,20,117" Grid.RowSpan="2" />
+        <Image Source="{Binding ImageData}" Margin="20,46,20,116" Grid.Row="1" />
         <!-- Lable for Box 
         <TextBox Grid.Row="0" x:Name="SearchBox" TextChanged="SearchBox_KeyUp" Margin="10,19,0,390" />-->
         <!-- combo box to filter list by level, this should be linked to the enum, however could not work out how to 
         "improt" the package -->
-        <ComboBox Name="LevelFilterComboBox" SelectionChanged="LevelFilterComboBox_SelectionChanged" Margin="75,44,10,115">
+        <ComboBox Name="LevelFilterComboBox" SelectionChanged="LevelFilterComboBox_SelectionChanged" Margin="75,44,10,0" VerticalAlignment="Top" Height="22">
             <ComboBoxItem Content="Student" />
             <ComboBoxItem Content="A" />
             <ComboBoxItem Content="B" />
@@ -44,7 +44,7 @@
         </ComboBox>
 
 
-        <ListView Name="researcherDetailsView" Grid.Column="1" VerticalAlignment="Top" Height="284" Grid.RowSpan="2">
+        <ListView Name="researcherDetailsView" Grid.Column="1" VerticalAlignment="Top" Height="356" Grid.RowSpan="2">
             <StackPanel>
                 <TextBlock Name="name" Text="Name: " FontSize="10" Margin="2"/>
                 <TextBlock Name="resTitle" Text="Title: " FontSize="10" Margin="2"/>
@@ -54,7 +54,6 @@
                 <TextBlock Name="job" Text="Current job:" FontSize="10" Margin="2"/>
                 <TextBlock Name="commencedInt" Text="Commenced with institution: " FontSize="10" Margin="2" />
                 <TextBlock Name="commencedCurr" Text="Commenced current position: " FontSize="10" Margin="2"/>
-                <TextBlock Name="prevPos" Text="Previous Positions: " FontSize="10" Margin="2"/>
                 <TextBlock Name="tenure" Text="Tenure: " FontSize="10" Margin="2"/>
                 <TextBlock Name="threeYearAvg" Text="Three-year-average: " FontSize="10" Margin="2"/>
                 <TextBlock Name="supervisions" Text="Supervisions" FontSize="10" Margin="2"/>
@@ -68,22 +67,31 @@
 
         <!-- Publications list -->
 
-        <TextBox x:Name="FirstNumberTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="85,105,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="61"/>
-        <TextBox x:Name="SecondNumberTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="0,105,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="75"/>
+        <TextBox x:Name="FirstNumberTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="65,216,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Height="18"/>
+        <TextBox x:Name="SecondNumberTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="10,216,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Height="18"/>
 
-        <Button Grid.Column="1" Content="filter by year" HorizontalAlignment="Left" Margin="185,105,0,0" Grid.Row="1" VerticalAlignment="Top" Click="Submit_Button_Click"/>
-        <ListView Name="PublicationListView" Margin="0,130,0,0" SelectionChanged= "PublicationListView_SelectionChanged" Grid.Column="1" Height="105" VerticalAlignment="Top" Grid.Row="1">
+        <Button Grid.Column="1" Content="filter by year" HorizontalAlignment="Left" Margin="10,245,0,0" Grid.Row="1" VerticalAlignment="Top" Click="Submit_Button_Click" Height="20" Width="70"/>
+        <Button Grid.Column="1" Content="Copy Email" HorizontalAlignment="Left" Grid.Row="1"  Height="15" Width="50" FontSize="9" Margin="170,0,0,0" VerticalAlignment="Top" Click="Button_Copy_Email_Click"/>
+        <ListView Name="PublicationListView" SelectionChanged= "PublicationListView_SelectionChanged" Grid.Column="1" Grid.Row="1" Margin="0,283,0,0">
+            <ListView.Resources>
+                <DataTemplate x:Key="HeadTemplate">
+                    <TextBlock HorizontalAlignment="Left" Text="{Binding}"/>
+                </DataTemplate>
+                <Style x:Key="HeaderStyle" TargetType="GridViewColumnHeader">
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                </Style>
+            </ListView.Resources>
             <ListView.View>
                 <GridView>
                     <GridViewColumn>
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader Content="Publication Date" Click="PublicationDateColumnHeader_Click" />
+                            <GridViewColumnHeader Content="Publication Date" Click="PublicationDateColumnHeader_Click" Width="100"/>
                         </GridViewColumn.Header>
                         <GridViewColumn.DisplayMemberBinding>
-                            <Binding Path="AvailabilityDate" StringFormat="{}{0:MM/dd/yyyy}" />
+                            <Binding Path="AvailabilityDate" StringFormat="{}{0:MM/dd/yyyy}"/>
                         </GridViewColumn.DisplayMemberBinding>
                     </GridViewColumn>
-                    <GridViewColumn Header="Publication Title" DisplayMemberBinding="{Binding Title}"/>
+                    <GridViewColumn Header="Publication Title" HeaderTemplate ="{StaticResource HeadTemplate}" HeaderContainerStyle="{StaticResource HeaderStyle}" DisplayMemberBinding="{Binding Title}"/>
                 </GridView>
             </ListView.View>
         </ListView>
@@ -105,8 +113,13 @@ publication became available; this can be negative if the availability date is i
                 <TextBlock Name="pubAge" Text="Age: " FontSize="10" Margin="2"/>
             </StackPanel>
         </ListView>
-        <TextBox HorizontalAlignment="Left" Margin="15,44,0,0" TextWrapping="Wrap" Text="Show:" VerticalAlignment="Top" Width="55" Height="29"/>
 
-        <TextBox x:Name="SearchBox" Margin="15,5,5,155" KeyDown="SearchBox_KeyDown" />
+        <Button x:Name="tempButton" Grid.Column="1" Content="Display Performance" HorizontalAlignment="Right" Margin="0,245,10,0" VerticalAlignment="Top" Click="tempButton_Click" Grid.Row="1" Height="20" Width="112"/>
+
+        <TextBox HorizontalAlignment="Left" Margin="15,44,0,0" TextWrapping="Wrap" Text="Show:" VerticalAlignment="Top" Width="55" Height="22"/>
+
+        <TextBox x:Name="SearchBox" Margin="15,5,5,0" KeyDown="SearchBox_KeyDown" Height="22" VerticalAlignment="Top" />
+        <Image Name="ResercherPhoto" Grid.Column="1" Margin="176,23,15,311" Grid.RowSpan="2" HorizontalAlignment="Right" MinWidth="100" MaxWidth="200" MinHeight="100" MaxHeight="300" VerticalAlignment="Top"/>
+        <Button Content="Generate Reports" HorizontalAlignment="Center" Margin="0,0,0,12" Grid.Row="1" Width="100" Click="Report_Button_Click" Height="20" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>
