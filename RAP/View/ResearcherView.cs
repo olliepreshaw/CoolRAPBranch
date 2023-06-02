@@ -11,11 +11,11 @@ namespace KIT206_RAP.View
 {
     internal class ResearcherView
     {
-                   public static void PrintAllResearchers(List<Researcher> ResList)
+        public static void PrintAllResearchers(List<Researcher> ResList)
         {
             Console.WriteLine("---\t---\tThis is the MainView\t---\t---");
             Console.WriteLine("Family Name | Given Name (title) | Employment level | student status |");
-            // here we will display different infor depending on if they are a student or not
+            // here we will display different info depending on if they are a student or not
             
             List <Staff> stfList = new List<Staff>();
             List <Student> stuList = new List<Student>();
@@ -44,21 +44,6 @@ namespace KIT206_RAP.View
                 Console.WriteLine(sta.FirstName);
             }
 
-
-
-
-            //filtRes.ForEach(res => Console.WriteLine($"{res.FirstName} {res.LastName}"));
-            /*
-            // below is just to demonstrate that these work
-            Console.WriteLine("sort by first");
-            SortByFirstName(ResList);
-            Console.WriteLine("sort by Last");
-            SortByLastName(ResList);
-            Console.WriteLine(" reverse sort by first");
-            ReverseSortByFirstName(ResList);
-            Console.WriteLine("reverse sort by Last");
-            ReverseSortByLastName(ResList);
-           */ 
             Console.WriteLine("Select researcher form the list wil line no");
             // get user input for the desired line number
             int selectedLine;
@@ -69,8 +54,8 @@ namespace KIT206_RAP.View
             Researcher selectedResearcher = ResList[selectedLine - 1];
             Console.WriteLine("you sleected " + selectedLine + "which is " + selectedResearcher.FirstName);
             Console.WriteLine(selectedResearcher.ID);
-            //ResearcherControl.DisplayResearcherDetails(selectedResearcher, resList);
         }
+
         // sorts a list of researchers by first name
         public static List<Researcher> SortByFirstName(List<Researcher> ResList){
             ResList.Sort((x, y) => x.FirstName.CompareTo(y.FirstName));
@@ -90,6 +75,7 @@ namespace KIT206_RAP.View
                 Console.WriteLine(res.LastName);
             }return ResList;
         }
+
         // reverse sort i.e. (z - a) a list of researchers by first name 
         public static List<Researcher> ReverseSortByFirstName(List<Researcher> ResList){
             ResList.Sort((x, y) => y.FirstName.CompareTo(x.FirstName));

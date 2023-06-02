@@ -29,26 +29,20 @@ namespace KIT206_RAP.Controll
         public static List<Researcher> FetchResearchers()
         {
             List<Researcher> ResList = DBAdapter.GetResearcher();
-            //List<Student> StuList = ResList.OfType<Student>().ToList();
             return ResList;
 
         }
         public static void DisplayResearchers()
         {
-            // old version passed list objects for student and staff
-            //List<Staff> StaList = DBAdapter.GetStaff();
-            //List<Student> StuList = DBAdapter.GetStudent();
+
             List<Researcher> ResList = DBAdapter.GetResearcher();
             List<Student> StuList = ResList.OfType<Student>().ToList();
 
 
             ResearcherView.PrintAllResearchers(ResList);
-            //ResearcherView.PrintAllResearchers(StuList, StaList);
         }
 
-        // need positions, not pubs here...
-        // positions only for staff, so two researcher details 
-        // UC16
+
         public static void DisplayResearcherDetails(Researcher Res, List<Researcher> resList)
         {
             Console.WriteLine("in display Researcher Details");
@@ -68,11 +62,9 @@ namespace KIT206_RAP.Controll
 
         public static void DisplayPerformanceDetails(Researcher Res)
         {
-            // performance details view
+
             DBAdapter.GetPubs(Res);
-            // Console.WriteLine(Res.Type);
-            // PublicationView.PrintAllPublication(Res);
-            //Console.WriteLine(Res.Type);
+
 
             PerformaceDetailsView.PrintPerformanceView(Res);
         }
@@ -98,9 +90,6 @@ namespace KIT206_RAP.Controll
         }
 
 
-
-        // can't pass an obersevable collection, so just pass the list and update the obs coll
-        // back in the main
         public static List<Researcher> FilterList(ObservableCollection<Researcher> ResList, string searchText)
         {
             // List to return. Temp strings to handle case

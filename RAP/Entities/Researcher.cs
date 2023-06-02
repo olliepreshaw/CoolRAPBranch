@@ -16,7 +16,6 @@ namespace KIT206_RAP.Entites
 
     public class Researcher
     {
-        // Properties some of these are not necisary
         public int ID { get; set; }
         public ResearcherType Type { get; set; }
         public string FirstName { get; set; }
@@ -35,7 +34,6 @@ namespace KIT206_RAP.Entites
         public JobTitle Job_Title { get; set; }
         public double ExpectedNoPubs { get; set; }
         public double Tenure { get; private set; } // time in fractional years since the researcher commecned with the institution
-        //public Level positionLevle { get; set; }
 
         // Constructor
 
@@ -97,14 +95,6 @@ namespace KIT206_RAP.Entites
             }
         }
 
-        // these do not happen in the constructor
-        // if the db returns a list of positions with the researcher i say we itterate / loop through them
-        // looking for what we need, if not we are calling the DB interface with a different query for each 
-        // piece of data we need
-
-        // overload constructor to deal with the position data
-        // not sure how this will be defined, do they have poitions from other institutions in this list?
-        // if so will have to check that the name matches the institution we are developing for presumably UTAS
         public static void CalcPositionInfo(Researcher researcher, List<Position> positions)
         {
             Console.WriteLine("\t\t\t\tthello in the funciton");
@@ -114,18 +104,10 @@ namespace KIT206_RAP.Entites
             }
             CalcEarliestPos(researcher, positions);
             CalcTenure(researcher, researcher.CommencedWithInstitution);
-            //CalcComencedCurrentPos(researcher, positions);
 
         }
         public static void CalcEarliestPos(Researcher researcher, List<Position> positions)
         {
-            //Commenced with institution is the start date of their earliest position.
-            // search the positions table for earliest start dat (min)
-            // SELECT MIN(start_date) as earliest_start_date
-            // FROM positions;
-            // find lowest dat in the list
-
-            // find lowest dat in the list
             DateTime lowest = DateTime.Today;
             foreach (Position position in positions)
             {
@@ -138,8 +120,6 @@ namespace KIT206_RAP.Entites
         }
         public static void CalcTenure(Researcher researcher,DateTime CommCurPos)
         {
-            //Tenure is the time in (fractional) years since the researcher commenced with the institution.
-            // CommWithInstitution - current timeDate;
 
             TimeSpan difference = DateTime.Now - CommCurPos;
             double years = difference.TotalDays / 365.25;
@@ -147,24 +127,17 @@ namespace KIT206_RAP.Entites
             researcher.Tenure = years;
         }
 
-        // this will just have to take the staff member (as stu do not have positions) and loop through looking for the pos. with end date == null
-        // // then get that pos start date
         public static DateTime CalcComencedCurrentPos(Staff Sta)
         {
-            // presume i don't have to handle null pointer / empty list
-            // as each staff will have a current position and entry in DB
             foreach (Position pos in Sta.Positions)
             {
                 if (pos.EndDate == null)
                 {
-                    // or return the pos, or whatever we want
                     return pos.StartDate;
                 }
             }
             return new DateTime(1,1,1);
         }
-        // this funciton assumes all publication were written in the time the researcher has been with this institution
-        // assid form that i think it is correct
         public static double CalculatePerformanceByPublication(Researcher researcher)
         {
             // Calculate the number of years since commencement
