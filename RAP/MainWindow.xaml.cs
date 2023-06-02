@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using RAP.Controll;
 using RAP.Entities;
+using System.Linq.Expressions;
 
 
 // This is a comment, welcom to the word of git
@@ -101,17 +102,23 @@ namespace RAP
         private void tempButton_Click(object sender, RoutedEventArgs e)
         {
             Researcher selectedResearcher = (Researcher)researcherListView.SelectedItem;
-            PerformanceDetailsWindow PdetailsView = new PerformanceDetailsWindow();
+            if (selectedResearcher != null)
+            {
+                PerformanceDetailsWindow PdetailsView = new PerformanceDetailsWindow();
+                ResearcherControl.ControllTheDeetails(selectedResearcher);
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.UriSource = new Uri(selectedResearcher.PhotoURL);
+                image.EndInit();
+                PdetailsView.profilePic.Source = image;
 
-            ResearcherControl.ControllTheDeetails(selectedResearcher);
-            BitmapImage image = new BitmapImage();
-            image.BeginInit();
-            image.UriSource = new Uri(selectedResearcher.PhotoURL);
-            image.EndInit();
-            PdetailsView.profilePic.Source = image;
-
-            PdetailsView.DataContext = selectedResearcher;
-            PdetailsView.Show();
+                PdetailsView.DataContext = selectedResearcher;
+                PdetailsView.Show();
+            }
+            else
+            {
+                MessageBox.Show("No researcher selected");
+            }
         }
 
         private void PublicationListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -171,7 +178,7 @@ namespace RAP
         {
             if (e.Key == Key.Enter)
             {
-                researcherListView.ItemsSource =  ResearcherControl.FilterName(SearchBox.Text, researchers);
+                researcherListView.ItemsSource =  ResearcherControl.FilterList(researchers, SearchBox.Text);
             }
         }
 
@@ -203,6 +210,21 @@ namespace RAP
                 {
                     selectedResearcherPublications.Add(publication);
                 }
+        }
+
+        private void Button_Copy_Email_Click(object sender, RoutedEventArgs e)
+        {
+            string copiedEmail;
+            Researcher selectedResearcher = (Researcher)researcherListView.SelectedItem;
+            if(selectedResearcher != null){
+                copiedEmail = selectedResearcher.Email;
+                Clipboard.SetText(copiedEmail);
+                MessageBox.Show("Text copied to clipboard." + copiedEmail);
+            }
+            else
+            {
+                MessageBox.Show("No researcher selected");
+            }
         }
     }
 }
