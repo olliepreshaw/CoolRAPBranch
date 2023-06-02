@@ -117,6 +117,16 @@ namespace RAP
             }
         }
 
+        private static string Wrap(string v, int size)
+        {
+            v = v.TrimStart();
+            if (v.Length <= size) return v;
+            var nextspace = v.LastIndexOf(' ', size);
+            if (-1 == nextspace) nextspace = Math.Min(v.Length, size);
+            return v.Substring(0, nextspace) + ((nextspace >= v.Length) ?
+            "" : "\n" + Wrap(v.Substring(nextspace), size));
+        }
+
         private void PublicationListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (PublicationListView.SelectedItem != null)
@@ -124,19 +134,20 @@ namespace RAP
                 Publication selectedPublication = (Publication)PublicationListView.SelectedItem;
                 DateTime now = DateTime.Now;
 
-                
+
+
                 DOI.Text = "DOI : " + selectedPublication.DOI;
-                pubTitle.Text = "Publication Title: " + selectedPublication.Title;
+                pubTitle.Text = "Publication Title: " + Wrap(selectedPublication.Title, 75);
                 authors.Text = "Authors: " + selectedPublication.Authors;
-                //pubYear.Text = "Publication Year: " + selectedPublication.year;
+                pubYear.Text = "Publication Year: " + selectedPublication.AvailabilityDate.Year;
                 ranking.Text = "Ranking: " + selectedPublication.Ranking;
                 pubType.Text = "Publication Type: " + selectedPublication.Type;
-                citeAS.Text = "Cite As: " + selectedPublication.CiteAs;
-                avaDate.Text = "Availability Date: " + selectedPublication.AvailabilityDate;
+                citeAS.Text = "Cite As: " + Wrap(selectedPublication.CiteAs, 75);
+                
+                avaDate.Text = "Availability Date: " + selectedPublication.AvailabilityDate.Date.ToShortDateString();
 
-                //pubAge.Text = "Publication Age: " + selectedPublication.Age;
+                pubAge.Text = "Publication Age: " + Math.Round((now - selectedPublication.AvailabilityDate).TotalDays);
              }
-
         }
 
         public MainWindow()
